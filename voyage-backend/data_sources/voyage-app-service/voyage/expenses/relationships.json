@@ -1,0 +1,14 @@
+{
+    "expense_items.[].user": {
+        "ref": "#/relationship/voyage-app-service/voyage/users",
+        "source_key": "expense_items.[].user",
+        "foreign_key": "_id",
+        "is_list": false
+    },
+    "group_id": {
+        "ref": "#/relationship/voyage-app-service/voyage/groups",
+        "source_key": "group_id",
+        "foreign_key": "_id",
+        "is_list": false
+    }
+}

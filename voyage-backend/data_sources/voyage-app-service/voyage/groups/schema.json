@@ -1,0 +1,96 @@
+{
+    "title": "Record of trip groups",
+    "required": [
+        "_id",
+        "users",
+        "group_name",
+        "start_date",
+        "end_date"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "users": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            },
+            "minItems": {
+                "$numberInt": "1"
+            }
+        },
+        "max_budget": {
+            "bsonType": "decimal",
+            "minimum": {
+                "$numberInt": "0"
+            }
+        },
+        "group_name": {
+            "bsonType": "string",
+            "maxLength": {
+                "$numberInt": "20"
+            }
+        },
+        "destination": {
+            "bsonType": "object",
+            "required": [
+                "lat",
+                "long"
+            ],
+            "properties": {
+                "lat": {
+                    "bsonType": "double",
+                    "minimum": {
+                        "$numberInt": "-90"
+                    },
+                    "maximum": {
+                        "$numberInt": "90"
+                    }
+                },
+                "long": {
+                    "bsonType": "double",
+                    "minimum": {
+                        "$numberInt": "-180"
+                    },
+                    "maximum": {
+                        "$numberInt": "180"
+                    }
+                }
+            }
+        },
+        "start_date": {
+            "bsonType": "date"
+        },
+        "end_date": {
+            "bsonType": "date"
+        },
+        "transit": {
+            "bsonType": "object",
+            "required": [
+                "carrier",
+                "departure_date",
+                "type"
+            ],
+            "properties": {
+                "carrier_details": {
+                    "bsonType": "string"
+                },
+                "departure_date": {
+                    "bsonType": "date"
+                },
+                "arrival_date": {
+                    "bsonType": "date"
+                },
+                "trainsit_type": {
+                    "enum": [
+                        "air",
+                        "train",
+                        "bus",
+                        "sea"
+                    ]
+                }
+            }
+        }
+    }
+}

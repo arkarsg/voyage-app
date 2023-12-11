@@ -1,0 +1,58 @@
+{
+    "title": "Record of accomodations",
+    "required": [
+        "_id",
+        "iti_id",
+        "location",
+        "start_date",
+        "end_date",
+        "price_per_night"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "iti_id": {
+            "bsonType": "objectId"
+        },
+        "location": {
+            "bsonType": "object",
+            "required": [
+                "lat",
+                "long"
+            ],
+            "properties": {
+                "lat": {
+                    "bsonType": "double",
+                    "minimum": {
+                        "$numberInt": "-90"
+                    },
+                    "maximum": {
+                        "$numberInt": "90"
+                    }
+                },
+                "long": {
+                    "bsonType": "double",
+                    "minimum": {
+                        "$numberInt": "-180"
+                    },
+                    "maximum": {
+                        "$numberInt": "180"
+                    }
+                }
+            }
+        },
+        "start_date": {
+            "bsonType": "date"
+        },
+        "end_date": {
+            "bsonType": "date"
+        },
+        "price_per_night": {
+            "bsonType": "decimal",
+            "minimum": {
+                "$numberInt": "0"
+            }
+        }
+    }
+}

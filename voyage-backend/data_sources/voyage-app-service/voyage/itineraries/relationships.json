@@ -1,0 +1,8 @@
+{
+    "group_id": {
+        "ref": "#/relationship/voyage-app-service/voyage/groups",
+        "source_key": "group_id",
+        "foreign_key": "_id",
+        "is_list": false
+    }
+}

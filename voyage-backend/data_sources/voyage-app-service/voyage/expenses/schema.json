@@ -1,0 +1,87 @@
+{
+    "title": "Record of expenses",
+    "required": [
+        "group_id"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "group_id": {
+            "bsonType": "objectId"
+        },
+        "expense_items": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "object",
+                "required": [
+                    "title",
+                    "date",
+                    "user",
+                    "amount"
+                ],
+                "properties": {
+                    "title": {
+                        "bsonType": "string",
+                        "minLength": {
+                            "$numberInt": "3"
+                        },
+                        "maxLength": {
+                            "$numberInt": "20"
+                        },
+                        "description": "title must be a string [3,20]"
+                    },
+                    "date": {
+                        "bsonType": "date",
+                        "description": "date and time of expense incurred"
+                    },
+                    "user": {
+                        "bsonType": "objectId",
+                        "description": "user that paid for the expense"
+                    },
+                    "tag": {
+                        "enum": [
+                            "shopping",
+                            "food",
+                            "transport",
+                            "accomodation",
+                            "misc"
+                        ],
+                        "description": "Tag must be 'shopping, food, transport, accomodation, misc'"
+                    },
+                    "amount": {
+                        "bsonType": "array",
+                        "minItems": {
+                            "$numberInt": "1"
+                        },
+                        "description": "Amount is a double and cannot be negative",
+                        "items": {
+                            "bsonType": "object",
+                            "required": [
+                                "currency",
+                                "value"
+                            ],
+                            "properties": {
+                                "currency": {
+                                    "bsonType": "string",
+                                    "description": "string description of the currency"
+                                },
+                                "value": {
+                                    "bsonType": "decimal",
+                                    "description": "decimal value of expense",
+                                    "minimum": {
+                                        "$numberInt": "0"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "minItems": {
+                "$numberInt": "0"
+            },
+            "uniqueItems": true
+        }
+    }
+}

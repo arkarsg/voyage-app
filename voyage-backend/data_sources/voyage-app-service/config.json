@@ -1,0 +1,10 @@
+{
+    "name": "voyage-app-service",
+    "type": "mongodb-atlas",
+    "config": {
+        "clusterName": "voyagecluster",
+        "readPreference": "primary",
+        "wireProtocolEnabled": true
+    },
+    "version": 1
+}

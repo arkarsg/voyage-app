@@ -1,0 +1,14 @@
+{
+    "creator_id": {
+        "ref": "#/relationship/voyage-app-service/voyage/users",
+        "source_key": "creator_id",
+        "foreign_key": "_id",
+        "is_list": false
+    },
+    "iti_id": {
+        "ref": "#/relationship/voyage-app-service/voyage/itineraries",
+        "source_key": "iti_id",
+        "foreign_key": "_id",
+        "is_list": false
+    }
+}

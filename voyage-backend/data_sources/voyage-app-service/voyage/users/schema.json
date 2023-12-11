@@ -1,0 +1,34 @@
+{
+    "required": [
+        "_id",
+        "username",
+        "email"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "username": {
+            "bsonType": "string",
+            "minLength": {
+                "$numberInt": "3"
+            },
+            "maxLength": {
+                "$numberInt": "20"
+            },
+            "description": "username is a string and is required"
+        },
+        "bio": {
+            "bsonType": "string",
+            "maxLength": {
+                "$numberInt": "100"
+            },
+            "description": "bio must be a string less than 100 characters"
+        },
+        "email": {
+            "bsonType": "string",
+            "pattern": "^[A-Za-z]*@gmail.com$",
+            "description": "email must be a string of valid gmail"
+        }
+    }
+}

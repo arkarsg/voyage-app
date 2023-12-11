@@ -1,0 +1,24 @@
+{
+    "title": "Record of day itinerary",
+    "required": [
+        "_id",
+        "date"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "group_id": {
+            "bsonType": "objectId"
+        },
+        "date": {
+            "bsonType": "date"
+        },
+        "created_at": {
+            "bsonType": "date"
+        },
+        "updated_at": {
+            "bsonType": "date"
+        }
+    }
+}

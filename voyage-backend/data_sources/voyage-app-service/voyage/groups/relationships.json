@@ -1,0 +1,8 @@
+{
+    "users": {
+        "ref": "#/relationship/voyage-app-service/voyage/users",
+        "source_key": "users",
+        "foreign_key": "_id",
+        "is_list": true
+    }
+}
