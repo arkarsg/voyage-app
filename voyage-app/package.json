@@ -9,10 +9,18 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@expo-google-fonts/dev": "^0.2.3",
+    "@expo-google-fonts/inter": "^0.2.3",
+    "@react-navigation/native": "^6.1.9",
+    "@react-navigation/native-stack": "^6.9.17",
     "@realm/react": "^0.6.2",
     "expo": "~49.0.15",
+    "expo-app-loading": "^2.1.1",
     "expo-constants": "~14.4.2",
     "expo-dev-client": "^2.4.12",
+    "expo-font": "~11.4.0",
+    "expo-image": "~1.3.5",
+    "expo-linear-gradient": "~12.3.0",
     "expo-linking": "~5.0.2",
     "expo-router": "^2.0.0",
     "expo-splash-screen": "~0.20.5",
