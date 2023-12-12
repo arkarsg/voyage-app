@@ -84,7 +84,11 @@ function RootLayoutNav() {
       <Stack.Screen
         name="register"
         options={{
-          headerTitle: "Create an account",
+          headerTitle: "Sign up with Google",
+          headerTitleStyle: {
+            fontFamily: 'IBMPlexSans_500Medium'
+          },
+          presentation: 'modal',
           headerLeft: () => (
             <Button
               title="Back"
@@ -95,6 +99,9 @@ function RootLayoutNav() {
           ),
         }}
       />
+      <Stack.Screen name="(tabs)" options={{
+        headerShown: false,
+      }} />
     </Stack>
   );
 }

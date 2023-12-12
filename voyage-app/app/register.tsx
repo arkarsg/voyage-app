@@ -4,7 +4,7 @@ import React from "react";
 const RegisterPage = () => {
   return (
     <View className="flex-1 justify-center items-center">
-      <Text>Register Page</Text>
+      <Text>Register page</Text>
     </View>
   );
 };
