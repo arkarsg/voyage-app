@@ -8,7 +8,7 @@ const Layout = () => {
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors.primary,
+        tabBarActiveTintColor: Colors.secondary,
         tabBarLabelStyle: {
           fontFamily: "IBMPlexSans_500Medium",
         },

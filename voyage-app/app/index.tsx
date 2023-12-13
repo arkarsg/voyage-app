@@ -19,19 +19,19 @@ const LoginPage = () => {
   };
 
   return (
-    <View className="flex-1 justify-center items-center bg-stone-900">
-      <ImageBackground
+    <View className="flex-1 justify-center items-center bg-stone-100">
+      {/* <ImageBackground
         source={require(backgroundImage)}
         resizeMode="stretch"
         style={{ height: height, width: width }}
-      >
-        <View className="h-full w-full justify-around flex pt-40 pb-10 bg-[#000000a0]">
+      > */}
+        <View className="h-full w-full justify-around flex pt-40 pb-10 bg-stone-200">
           <View className="flex items-center pt-48">
             <Text
               style={{
                 fontFamily: "SpaceGrotesk_700Bold",
               }}
-              className="text-voyage-purple -tracking-widest text-8xl"
+              className="text-voyage-blue -tracking-widest text-8xl"
             >
               Voyage
             </Text>
@@ -43,8 +43,8 @@ const LoginPage = () => {
               onPress={handlePress}
             >
               <LinearGradient
-                colors={["#F2C2EE", "#D073D1", "#BA42C0"]}
-                locations={[0.0, 0.4, 0.7]}
+                colors={["#81DFDA", "#0081A7"]}
+                locations={[0.0, 0.8]}
                 start={[1.0, 1.0]}
                 end={[0.0, 0.0]}
                 className="rounded-3xl w-11/12 items-center px-4 py-3"
@@ -53,7 +53,7 @@ const LoginPage = () => {
                   style={{
                     fontFamily: "IBMPlexSans_500Medium",
                   }}
-                  className="text-black tracking-tightest text-lg"
+                  className="text-zinc-800 tracking-tightest text-lg"
                 >
                   Log in
                 </Text>
@@ -63,12 +63,12 @@ const LoginPage = () => {
               style={{
                 fontFamily: "IBMPlexSans_500Medium",
               }}
-              className="text-neutral-300 tracking-tightest text-m"
+              className="text-zinc-800 tracking-tightest text-m"
             >
               Or
             </Text>
             <Link href={"/register"} asChild>
-              <Pressable className="rounded-3xl w-10/12 items-center px-2 py-2 flex-row bg-neutral-300">
+              <Pressable className="rounded-3xl w-10/12 items-center px-2 py-2 flex-row bg-stone-300">
                 <View className="ml-1">
                   <FontAwesome name="google" size={24} color="black" />
                 </View>
@@ -76,7 +76,7 @@ const LoginPage = () => {
                   style={{
                     fontFamily: "IBMPlexSans_500Medium",
                   }}
-                  className="text-black tracking-tightest text-lg ml-14"
+                  className="text-zinc-800 tracking-tightest text-lg ml-14"
                 >
                   Continue with Google
                 </Text>
@@ -84,7 +84,7 @@ const LoginPage = () => {
             </Link>
           </View>
         </View>
-      </ImageBackground>
+      {/* </ImageBackground> */}
     </View>
   );
 };
