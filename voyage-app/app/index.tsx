@@ -12,12 +12,6 @@ import { SignedOut } from "@clerk/clerk-expo";
 
 const LoginPage = () => {
   // const backgroundImage = "../assets/giphy.gif";
-  const router = useRouter();
-
-  const handlePress = () => {
-    router.replace("login");
-  };
-
   return (
     <SignedOut>
       <View className="flex-1 justify-center items-center bg-stone-100">

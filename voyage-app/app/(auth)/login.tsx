@@ -1,5 +1,5 @@
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link } from "expo-router";
+import { Link, router, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -13,6 +13,10 @@ import {
 import Spinner from "react-native-loading-spinner-overlay";
 
 const login = () => {
+  const router = useRouter();
+  const handleCreateAccountPress = () => {
+    router.push("register");
+  };
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const [emailAddress, setEmailAddress] = useState("");
@@ -105,24 +109,22 @@ const login = () => {
       <View className="justify-center flex-row items-center m-5">
         <Text
           style={{
-            fontFamily: "IBMPlexSans_400Regular,",
+            fontFamily: "IBMPlexSans_400Regular",
           }}
           className="text-zinc-700 text-m"
         >
           Don't have an account?{" "}
         </Text>
-        <Link href="/register" asChild>
-          <Pressable>
+          <Pressable onPress={handleCreateAccountPress}>
             <Text
               style={{
-                fontFamily: "IBMPlexSans_400Regular,",
+                fontFamily: "IBMPlexSans_400Regular",
               }}
               className="text-voyage-blue text-m"
             >
               Create Account
             </Text>
           </Pressable>
-        </Link>
       </View>
     </View>
   );
