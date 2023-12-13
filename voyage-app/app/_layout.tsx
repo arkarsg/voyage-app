@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { SplashScreen, Stack, useRouter } from "expo-router";
+import { Slot, SplashScreen, Stack, useRouter, useSegments } from "expo-router";
 import { RealmProvider } from "@realm/react";
-import { ClerkProvider } from "@clerk/clerk-expo";
+import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
 import {
   useFonts,
@@ -18,16 +18,22 @@ import {
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/dev";
 import { Button } from "react-native";
-
 export { ErrorBoundary } from "expo-router";
 
+const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 export const unstable_settings = {
   initialRouteName: "/",
 };
 
 SplashScreen.preventAutoHideAsync();
 
-export default function RootLayout() {
+const InitialLayout = () => {
+  const router = useRouter();
+  // Clerk consts
+  const { isLoaded, isSignedIn } = useAuth();
+  const segments = useSegments();
+
+  // Fonts
   const [fontsLoaded, fontError] = useFonts({
     IBMPlexSans_400Regular,
     IBMPlexSans_400Regular_Italic,
@@ -52,109 +58,48 @@ export default function RootLayout() {
     }
   }, [fontsLoaded]);
 
+  useEffect(() => {
+    if (!isLoaded) return;
+
+    const isInTabsGroup = segments[0] === "(tabs)";
+
+    if (isSignedIn && !isInTabsGroup) {
+      router.replace("/overview");
+    } else if (!isSignedIn) {
+      router.replace("/welcome");
+    }
+  }, [isSignedIn]);
+
   if (!fontsLoaded) {
-    return null;
+    return <Slot/>;
   }
 
-  const tokenCache = {
-    async getToken(key: string) {
-      try {
-        return SecureStore.getItemAsync(key);
-      } catch (err) {
-        return null;
-      }
-    },
-    async saveToken(key: string, value: string) {
-      try {
-        return SecureStore.setItemAsync(key, value);
-      } catch (err) {
-        return;
-      }
-    },
-  };
+  return <Slot />;
+};
 
-  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
+};
 
+const RootLayout = () => {
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <RootLayoutNav />
+      <InitialLayout />
     </ClerkProvider>
   );
-}
+};
 
-function RootLayoutNav() {
-  const router = useRouter();
-  return (
-    <Stack>
-      <Stack.Screen
-        name="index"
-        options={{ headerTitle: "Welcome", headerShown: false }}
-      />
-      <Stack.Screen
-        name="(public)/register"
-        options={{
-          headerTitle: "Sign up with Google",
-          headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
-          },
-          presentation: "modal",
-          headerLeft: () => (
-            <Button
-              title="Back"
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="(public)/login"
-        options={{
-          headerTitle: "Log in",
-          headerTintColor: "#f5f5f4",
-          headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
-            color: "#27272a",
-          },
-          presentation: "modal",
-          headerLeft: () => (
-            <Button
-              title="Back"
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-      <Stack.Screen
-        name="(public)/reset"
-        options={{
-          headerTitle: "Reset password",
-          headerTintColor: "#f5f5f4",
-          headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
-            color: "#27272a",
-          },
-          presentation: "modal",
-          headerLeft: () => (
-            <Button
-              title="Back"
-              onPress={() => {
-                router.back();
-              }}
-            />
-          ),
-        }}
-      />
-
-      <Stack.Screen
-        name="(tabs)"
-        options={{
-          headerShown: false,
-        }}
-      />
-    </Stack>
-  );
-}
+export default RootLayout;
