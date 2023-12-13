@@ -1,6 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { SplashScreen, Stack, useRouter } from "expo-router";
 import { RealmProvider } from "@realm/react";
+import { ClerkProvider } from "@clerk/clerk-expo";
+import * as SecureStore from "expo-secure-store";
+
 import {
   useFonts,
   IBMPlexSans_100Thin,
@@ -28,7 +31,7 @@ import { Button } from "react-native";
 export { ErrorBoundary } from "expo-router";
 
 export const unstable_settings = {
-  initialRouteName: "(tabs)",
+  initialRouteName: "/",
 };
 
 SplashScreen.preventAutoHideAsync();
@@ -70,7 +73,30 @@ export default function RootLayout() {
     return null;
   }
 
-  return <RootLayoutNav />;
+  const tokenCache = {
+    async getToken(key: string) {
+      try {
+        return SecureStore.getItemAsync(key);
+      } catch (err) {
+        return null;
+      }
+    },
+    async saveToken(key: string, value: string) {
+      try {
+        return SecureStore.setItemAsync(key, value);
+      } catch (err) {
+        return;
+      }
+    },
+  };
+
+  const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+
+  return (
+    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+      <RootLayoutNav />
+    </ClerkProvider>
+  );
 }
 
 function RootLayoutNav() {
@@ -82,13 +108,13 @@ function RootLayoutNav() {
         options={{ headerTitle: "Welcome", headerShown: false }}
       />
       <Stack.Screen
-        name="register"
+        name="(auth)/register"
         options={{
           headerTitle: "Sign up with Google",
           headerTitleStyle: {
-            fontFamily: 'IBMPlexSans_500Medium'
+            fontFamily: "IBMPlexSans_500Medium",
           },
-          presentation: 'modal',
+          presentation: "modal",
           headerLeft: () => (
             <Button
               title="Back"
@@ -99,9 +125,32 @@ function RootLayoutNav() {
           ),
         }}
       />
-      <Stack.Screen name="(tabs)" options={{
-        headerShown: false,
-      }} />
+      <Stack.Screen
+        name="(auth)/login"
+        options={{
+          headerTitle: "Log in",
+          headerTintColor: "#f5f5f4",
+          headerTitleStyle: {
+            fontFamily: "IBMPlexSans_500Medium",
+            color: "#27272a",
+          },
+          presentation: "modal",
+          headerLeft: () => (
+            <Button
+              title="Back"
+              onPress={() => {
+                router.back();
+              }}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="(tabs)"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 }
