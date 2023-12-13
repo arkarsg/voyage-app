@@ -10,9 +10,9 @@ import { useSignUp } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
 import { Link, Stack, useRouter } from "expo-router";
-import { isValidEmail } from "./utils/ValidEmail";
-import { isValidUsername } from "./utils/ValidUsername";
-import { isStrongPassword } from "./utils/PasswordStrength";
+import { isValidEmail } from "../../utils/ValidEmail";
+import { isValidUsername } from "../../utils/ValidUsername";
+import { isStrongPassword } from "../../utils/PasswordStrength";
 
 const register = () => {
   const router = useRouter();

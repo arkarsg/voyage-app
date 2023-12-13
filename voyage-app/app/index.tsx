@@ -33,7 +33,7 @@ const LoginPage = () => {
           </View>
 
           <View className="flex items-center mx-4 space-y-4 pt-44">
-            <Link href={"/(auth)/login"} asChild>
+            <Link href={"/(public)/login"} asChild>
               <Pressable className="rounded-2xl w-full items-center">
                 <LinearGradient
                   colors={["#81DFDA", "#0081A7"]}
@@ -61,7 +61,7 @@ const LoginPage = () => {
             >
               Or
             </Text>
-            <Link href={"/(auth)/register"} asChild>
+            <Link href={"/(public)/register"} asChild>
               <Pressable className="rounded-3xl w-10/12 items-center px-2 py-2 flex-row bg-stone-300">
                 <View className="ml-1">
                   <FontAwesome name="google" size={24} color="black" />
