@@ -1,13 +1,22 @@
-import { Button, TextInput, View, StyleSheet } from "react-native";
+import {
+  Button,
+  TextInput,
+  View,
+  StyleSheet,
+  Text,
+  Pressable,
+} from "react-native";
 import { useSignUp } from "@clerk/clerk-expo";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
-import { Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { isValidEmail } from "./utils/ValidEmail";
 import { isValidUsername } from "./utils/ValidUsername";
 import { isStrongPassword } from "./utils/PasswordStrength";
 
 const register = () => {
+  const router = useRouter();
+
   const { isLoaded, signUp, setActive } = useSignUp();
 
   const [username, setUsername] = useState("");
@@ -63,50 +72,144 @@ const register = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <View className="h-full w-full flex bg-stone-100">
       <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
       <Spinner visible={loading} />
 
       {!pendingVerification && (
         <>
-          <TextInput
-            autoCapitalize="none"
-            placeholder="simon@galaxies.dev"
-            value={emailAddress}
-            onChangeText={setEmailAddress}
-            style={styles.inputField}
-          />
-          <TextInput
-            placeholder="password"
-            value={password}
-            onChangeText={setPassword}
-            secureTextEntry
-            style={styles.inputField}
-          />
-
-          <Button
-            onPress={onSignUpPress}
-            title="Sign up"
-            color={"#6c47ff"}
-          ></Button>
+          <View className="flex items-center space-y-5 pt-32">
+            <View className="space-y-2 w-full items-center">
+              <View className="justify-around items-left border-b border-stone-300 w-10/12">
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="E-mail"
+                  value={emailAddress}
+                  onChangeText={setEmailAddress}
+                  style={{
+                    marginVertical: 15,
+                    fontFamily: "IBMPlexSans_500Medium",
+                    fontSize: 15,
+                  }}
+                />
+              </View>
+              <View className="justify-around items-left border-b border-stone-300 w-10/12">
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Username"
+                  value={username}
+                  onChangeText={setUsername}
+                  style={{
+                    marginVertical: 15,
+                    fontFamily: "IBMPlexSans_500Medium",
+                    fontSize: 15,
+                  }}
+                />
+              </View>
+              <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
+                <TextInput
+                  placeholder="Password"
+                  value={password}
+                  onChangeText={setPassword}
+                  secureTextEntry
+                  style={{
+                    marginVertical: 15,
+                    fontFamily: "IBMPlexSans_500Medium",
+                    fontSize: 15,
+                  }}
+                />
+              </View>
+              <Pressable
+                onPress={onSignUpPress}
+                className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
+              >
+                <Text
+                  style={{
+                    fontFamily: "IBMPlexSans_500Medium",
+                  }}
+                  className="text-zinc-100 text-lg"
+                >
+                  Join
+                </Text>
+              </Pressable>
+            </View>
+            <View className="justify-center flex-row items-center">
+              <Text
+                style={{
+                  fontFamily: "IBMPlexSans_400Regular",
+                }}
+                className="text-zinc-700 text-m"
+              >
+                Have an account?{" "}
+              </Text>
+              <Link href="/login" asChild>
+                <Pressable>
+                  <Text
+                    style={{
+                      fontFamily: "IBMPlexSans_400Regular",
+                    }}
+                    className="text-voyage-blue text-m"
+                  >
+                    Log in
+                  </Text>
+                </Pressable>
+              </Link>
+            </View>
+          </View>
         </>
       )}
 
       {pendingVerification && (
         <>
-          <View>
-            <TextInput
-              value={code}
-              placeholder="Code..."
-              style={styles.inputField}
-              onChangeText={setCode}
-            />
+          <View className="flex items-center space-y-5 pt-32">
+            <View className="space-y-2 w-full items-center">
+              <View className="space-y-2 w-10/12 m-5">
+                <Text
+                  style={{
+                    fontFamily: "IBMPlexSans_600SemiBold",
+                  }}
+                  className="text-zinc-700 text-2xl"
+                >
+                  Just one more step...
+                </Text>
+                <Text
+                  style={{
+                    fontFamily: "IBMPlexSans_500Medium",
+                  }}
+                  className="text-zinc-700 text-m"
+                >
+                  We have sent a verification code to your e-mail!{"\n"}Paste
+                  the code below
+                </Text>
+              </View>
+              <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
+                <TextInput
+                  autoCapitalize="none"
+                  placeholder="Verification code"
+                  value={code}
+                  onChangeText={setCode}
+                  style={{
+                    marginVertical: 15,
+                    fontFamily: "IBMPlexSans_500Medium",
+                    fontSize: 15,
+                  }}
+                />
+              </View>
+              <Pressable
+                onPress={onPressVerify}
+                className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
+              >
+                <Text
+                  style={{
+                    fontFamily: "IBMPlexSans_500Medium",
+                  }}
+                  className="text-zinc-100 text-lg"
+                >
+                  Verify account
+                </Text>
+              </Pressable>
+            </View>
           </View>
-          <Button
-            onPress={onPressVerify}
-            title="Verify Email"
-            color={"#6c47ff"}
-          ></Button>
         </>
       )}
     </View>
@@ -114,24 +217,3 @@ const register = () => {
 };
 
 export default register;
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: "center",
-    padding: 20,
-  },
-  inputField: {
-    marginVertical: 4,
-    height: 50,
-    borderWidth: 1,
-    borderColor: "#6c47ff",
-    borderRadius: 4,
-    padding: 10,
-    backgroundColor: "#fff",
-  },
-  button: {
-    margin: 8,
-    alignItems: "center",
-  },
-});

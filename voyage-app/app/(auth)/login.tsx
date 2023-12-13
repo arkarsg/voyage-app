@@ -1,5 +1,5 @@
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link, router, useRouter } from "expo-router";
+import { Link, useRouter } from "expo-router";
 import React, { useState } from "react";
 import {
   View,
@@ -14,9 +14,15 @@ import Spinner from "react-native-loading-spinner-overlay";
 
 const login = () => {
   const router = useRouter();
+
   const handleCreateAccountPress = () => {
     router.push("register");
   };
+
+  const handleResetPress = () => {
+    router.push("reset");
+  };
+
   const { signIn, setActive, isLoaded } = useSignIn();
 
   const [emailAddress, setEmailAddress] = useState("");
@@ -77,18 +83,19 @@ const login = () => {
             />
           </View>
 
-          <Link href="/" asChild>
-            <Pressable className="flex items-end p-3 justify-end space-y-5 ml-60">
-              <Text
-                style={{
-                  fontFamily: "IBMPlexSans_500Medium",
-                }}
-                className="text-voyage-blue tracking-tightest text-sm"
-              >
-                Forgot password?
-              </Text>
-            </Pressable>
-          </Link>
+          <Pressable
+            className="flex items-end p-3 justify-end space-y-5 ml-60"
+            onPress={handleResetPress}
+          >
+            <Text
+              style={{
+                fontFamily: "IBMPlexSans_400Regular",
+              }}
+              className="text-voyage-blue tracking-tightest text-m"
+            >
+              Forgot password?
+            </Text>
+          </Pressable>
         </View>
 
         <Pressable
@@ -115,16 +122,16 @@ const login = () => {
         >
           Don't have an account?{" "}
         </Text>
-          <Pressable onPress={handleCreateAccountPress}>
-            <Text
-              style={{
-                fontFamily: "IBMPlexSans_400Regular",
-              }}
-              className="text-voyage-blue text-m"
-            >
-              Create Account
-            </Text>
-          </Pressable>
+        <Pressable onPress={handleCreateAccountPress}>
+          <Text
+            style={{
+              fontFamily: "IBMPlexSans_400Regular",
+            }}
+            className="text-voyage-blue text-m"
+          >
+            Create Account
+          </Text>
+        </Pressable>
       </View>
     </View>
   );

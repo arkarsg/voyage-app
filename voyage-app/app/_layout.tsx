@@ -146,6 +146,27 @@ function RootLayoutNav() {
         }}
       />
       <Stack.Screen
+        name="(auth)/reset"
+        options={{
+          headerTitle: "Reset password",
+          headerTintColor: "#f5f5f4",
+          headerTitleStyle: {
+            fontFamily: "IBMPlexSans_500Medium",
+            color: "#27272a",
+          },
+          presentation: "modal",
+          headerLeft: () => (
+            <Button
+              title="Back"
+              onPress={() => {
+                router.back();
+              }}
+            />
+          ),
+        }}
+      />
+
+      <Stack.Screen
         name="(tabs)"
         options={{
           headerShown: false,
