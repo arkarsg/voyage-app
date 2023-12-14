@@ -1,16 +1,14 @@
 import {
-  Dimensions,
-  ImageBackground,
   View,
   Text,
   Pressable,
 } from "react-native";
-import { Link, useRouter } from "expo-router";
+import { Link } from "expo-router";
 import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 import { SignedOut } from "@clerk/clerk-expo";
 
-const AuthPage = () => {
+export function AuthPage() {
   // const backgroundImage = "../assets/giphy.gif";
   return (
     <SignedOut>
@@ -83,5 +81,3 @@ const AuthPage = () => {
     </SignedOut>
   );
 };
-
-export default AuthPage;
