@@ -16,12 +16,11 @@ import {
   SpaceGrotesk_600SemiBold,
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/dev";
-import { AuthPage } from "./(public)/welcome";
 import { RealmProvider, AppProvider, UserProvider } from "@realm/react";
 import { OpenRealmBehaviorType } from "realm";
 import { schemas } from "./models";
 import { Task } from "./models/Task";
-import {SYNC_CONFIG} from '../sync.config';
+import AuthPage from "./(public)/welcome";
 
 export { ErrorBoundary } from "expo-router";
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
@@ -68,9 +67,9 @@ const InitialLayout = () => {
     const isInTabsGroup = segments[0] === "(tabs)";
 
     if (isSignedIn && !isInTabsGroup) {
-      router.replace("/overview");
+      router.replace("overview");
     } else if (!isSignedIn) {
-      router.replace("/welcome");
+      router.replace("welcome");
     }
   }, [isSignedIn]);
 
@@ -98,21 +97,18 @@ const tokenCache = {
   },
 };
 
-const appId = SYNC_CONFIG.appId;
 
 const RootLayout = () => {
+  const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
+  console.log(appId);
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <AppProvider id={appId}>
         <UserProvider fallback={<AuthPage />}>
           <RealmProvider
-            schema={schemas}
+            schema={[]}
             sync={{
               flexible: true,
-              initialSubscriptions: {
-                update: (mutableSubs, realm) =>
-                  mutableSubs.add(realm.objects(Task), { name: "myTasks" }),
-              },
               newRealmFileBehavior: {
                 type: OpenRealmBehaviorType.DownloadBeforeOpen,
               },

@@ -1,19 +1,14 @@
-import { useSignIn } from "@clerk/clerk-expo";
-import { Link, useRouter } from "expo-router";
+import { useSignIn, useAuth as useClerkAuth } from "@clerk/clerk-expo";
+import { useAuth as useRealmAuth } from "@realm/react";
+import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Pressable,
-  Text,
-  Alert,
-} from "react-native";
+import { View, TextInput, Pressable, Text, Alert } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 const login = () => {
   const router = useRouter();
+  const { logInWithJWT, result } = useRealmAuth();
+  const { getToken, isSignedIn } = useClerkAuth();
 
   const handleCreateAccountPress = () => {
     router.push("register");
@@ -42,6 +37,10 @@ const login = () => {
 
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
+      // token from Clerk
+      const token = await getToken() as string;
+      // authenticate to Realm
+      logInWithJWT(token);
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {

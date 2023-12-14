@@ -8,7 +8,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { FontAwesome } from "@expo/vector-icons";
 import { SignedOut } from "@clerk/clerk-expo";
 
-export function AuthPage() {
+const AuthPage = () => {
   // const backgroundImage = "../assets/giphy.gif";
   return (
     <SignedOut>
@@ -81,3 +81,5 @@ export function AuthPage() {
     </SignedOut>
   );
 };
+
+export default AuthPage;

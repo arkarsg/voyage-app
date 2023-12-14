@@ -15,7 +15,7 @@ const reset = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
-  const [successfulCreation, setSuccessfulCreation] = useState(true);
+  const [successfulCreation, setSuccessfulCreation] = useState(false);
   const { signIn, setActive } = useSignIn();
 
   // Request a passowrd reset code by email

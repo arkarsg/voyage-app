@@ -17,6 +17,18 @@
         },
         "secret_config": {
             "signingKeys": []
-        }
+        },
+        "metadata_fields": [
+            {
+                "required": true,
+                "name": "user.username",
+                "field_name": "name"
+            },
+            {
+                "required": true,
+                "name": "user.id",
+                "field_name": "id"
+            }
+        ]
     }
 }

@@ -1,23 +1,15 @@
-import {
-  Button,
-  TextInput,
-  View,
-  StyleSheet,
-  Text,
-  Pressable,
-} from "react-native";
-import { useSignUp } from "@clerk/clerk-expo";
+import { TextInput, View, Text, Pressable } from "react-native";
+import { useSignUp, useAuth as useClerkAuth } from "@clerk/clerk-expo";
+import { useAuth as useRealmAuth } from "@realm/react";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
-import { Link, Stack, useRouter } from "expo-router";
-import { isValidEmail } from "../../utils/ValidEmail";
+import { Link, Stack } from "expo-router";
 import { isValidUsername } from "../../utils/ValidUsername";
-import { isStrongPassword } from "../../utils/PasswordStrength";
 
 const register = () => {
-  const router = useRouter();
-
   const { isLoaded, signUp, setActive } = useSignUp();
+  const { logInWithJWT, result } = useRealmAuth();
+  const { getToken, isSignedIn } = useClerkAuth();
 
   const [username, setUsername] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -64,6 +56,11 @@ const register = () => {
       });
 
       await setActive({ session: completeSignUp.createdSessionId });
+      // token from Clerk
+      const token = (await getToken()) as string;
+      // authenticate to Realm
+      logInWithJWT(token);
+      console.log("🎉 Registered user in Realm")
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {
