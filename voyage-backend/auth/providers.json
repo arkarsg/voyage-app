@@ -3,5 +3,20 @@
         "name": "api-key",
         "type": "api-key",
         "disabled": true
+    },
+    "custom-token": {
+        "name": "custom-token",
+        "type": "custom-token",
+        "disabled": false,
+        "config": {
+            "audience": [],
+            "jwkURI": "https://touched-serval-64.clerk.accounts.dev/.well-known/jwks.json",
+            "requireAnyAudience": false,
+            "signingAlgorithm": "",
+            "useJWKURI": true
+        },
+        "secret_config": {
+            "signingKeys": []
+        }
     }
 }

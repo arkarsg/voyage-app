@@ -1,23 +1,23 @@
 {
-    "collection": "Task",
     "database": "voyage",
+    "collection": "task",
     "roles": [
         {
             "name": "readOwnWriteOwn",
             "apply_when": {},
             "document_filters": {
-                "write": {
+                "read": {
                     "userId": "%%user.id"
                 },
-                "read": {
+                "write": {
                     "userId": "%%user.id"
                 }
             },
-            "read": true,
-            "write": true,
             "insert": true,
             "delete": true,
-            "search": true
+            "search": true,
+            "read": true,
+            "write": true
         }
     ]
 }
