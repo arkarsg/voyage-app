@@ -25,6 +25,9 @@ import Realm, {
 import { logger } from "./utils/logger";
 import { AuthResultBoundary } from "./components/AuthResultBoundary";
 import { Task } from "./models/Task";
+import { schemas } from "./models";
+import { User } from "./models/User";
+import { Group } from "./models/Group";
 
 export { ErrorBoundary } from "expo-router";
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
@@ -153,12 +156,14 @@ export default function RootLayout() {
         <AuthResultBoundary>
           <UserProvider fallback={InitialLayout}>
             <RealmProvider
-              schema={[Task]}
+              schema={schemas}
               sync={{
                 flexible: true,
                 initialSubscriptions: {
                   update: (mutableSubs, realm) => {
                     mutableSubs.add(realm.objects(Task));
+                    mutableSubs.add(realm.objects(User));
+                    mutableSubs.add(realm.objects(Group));
                   },
                 },
                 newRealmFileBehavior: {
@@ -168,7 +173,7 @@ export default function RootLayout() {
                   type: OpenRealmBehaviorType.OpenImmediately,
                 },
                 clientReset: {
-                  mode: ClientResetMode.RecoverOrDiscardUnsyncedChanges,
+                  mode: ClientResetMode.DiscardUnsyncedChanges,
                   onBefore: handlePreClientReset,
                 },
                 onError: handleSyncError,
