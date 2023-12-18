@@ -1,0 +1,20 @@
+{
+    "title": "Groups",
+    "type": "object",
+    "required": [
+        "_id",
+        "creator_id",
+        "group_name"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "creator_id": {
+            "bsonType": "objectId"
+        },
+        "group_name": {
+            "bsonType": "string"
+        }
+    }
+}

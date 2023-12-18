@@ -1,0 +1,30 @@
+{
+    "title": "Users",
+    "type": "object",
+    "required": [
+        "_id",
+        "clerk_id",
+        "email",
+        "username"
+    ],
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "clerk_id": {
+            "bsonType": "string"
+        },
+        "email": {
+            "bsonType": "string"
+        },
+        "trip_groups": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
+        },
+        "username": {
+            "bsonType": "string"
+        }
+    }
+}

@@ -55,7 +55,7 @@ async function extractAndVerifyHeaders(request, response) {
 
 function getUserDataFromEvent(evt) {
   return {
-    clerkUserId: evt.data.id,
+    clerk_id: evt.data.id,
     username: evt.data.username,
     email: evt.data.email_addresses[0].email_address,
   };

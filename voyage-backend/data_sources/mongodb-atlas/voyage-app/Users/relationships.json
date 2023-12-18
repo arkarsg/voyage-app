@@ -1,0 +1,8 @@
+{
+    "trip_groups": {
+        "ref": "#/relationship/mongodb-atlas/voyage-app/Groups",
+        "source_key": "trip_groups",
+        "foreign_key": "_id",
+        "is_list": true
+    }
+}
