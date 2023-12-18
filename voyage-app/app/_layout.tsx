@@ -17,16 +17,41 @@ import {
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/dev";
 import { RealmProvider, AppProvider, UserProvider } from "@realm/react";
-import { OpenRealmBehaviorType } from "realm";
-import { schemas } from "./models";
-import { Task } from "./models/Task";
-import AuthPage from "./(public)/welcome";
+import Realm, { ClientResetMode, OpenRealmBehaviorType, SyncError } from "realm";
+import { logger } from "./utils/logger";
+import { AuthResultBoundary } from "./components/AuthResultBoundary";
 
 export { ErrorBoundary } from "expo-router";
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 export const unstable_settings = {
   initialRouteName: "/",
 };
+
+Realm.setLogLevel("trace");
+Realm.setLogger((logLevel, message) => {
+  const formattedMessage = `Log level: ${logLevel} -- Log Message: ${message}`;
+  if (logLevel === "error" || logLevel === "fatal") {
+    logger.error(formattedMessage);
+  } else {
+    logger.info(formattedMessage);
+  }
+});
+
+function handleSyncError(
+  session: Realm.App.Sync.SyncSession,
+  error: SyncError
+): void {
+  logger.error(error);
+}
+
+function handlePreClientReset(localRealm: Realm): void {
+  logger.info("Initiating client reset...");
+}
+
+// 
+function handlePostClientReset(localRealm: Realm, remoteRealm: Realm): void {
+  logger.info("Client has been reset");
+}
 
 SplashScreen.preventAutoHideAsync();
 
@@ -97,29 +122,35 @@ const tokenCache = {
   },
 };
 
-
 const RootLayout = () => {
   const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
   console.log(appId);
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <AppProvider id={appId}>
-        <UserProvider fallback={<AuthPage />}>
-          <RealmProvider
-            schema={[]}
-            sync={{
-              flexible: true,
-              newRealmFileBehavior: {
-                type: OpenRealmBehaviorType.DownloadBeforeOpen,
-              },
-              existingRealmFileBehavior: {
-                type: OpenRealmBehaviorType.OpenImmediately,
-              },
-            }}
-          >
-            <InitialLayout />
-          </RealmProvider>
-        </UserProvider>
+        <AuthResultBoundary>
+          <UserProvider fallback={InitialLayout}>
+            <RealmProvider
+              schema={[]}
+              sync={{
+                flexible: true,
+                newRealmFileBehavior: {
+                  type: OpenRealmBehaviorType.DownloadBeforeOpen,
+                },
+                existingRealmFileBehavior: {
+                  type: OpenRealmBehaviorType.OpenImmediately,
+                },
+                clientReset: {
+                  mode: ClientResetMode.RecoverOrDiscardUnsyncedChanges,
+                  onBefore: handlePreClientReset,
+                },
+                onError: handleSyncError,
+              }}
+            >
+              <InitialLayout />
+            </RealmProvider>
+          </UserProvider>
+        </AuthResultBoundary>
       </AppProvider>
     </ClerkProvider>
   );

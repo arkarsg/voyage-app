@@ -4,7 +4,7 @@ import { useAuth as useRealmAuth } from "@realm/react";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
 import { Link, Stack } from "expo-router";
-import { isValidUsername } from "../../utils/ValidUsername";
+import { isValidUsername } from "../utils/ValidUsername";
 
 const register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
