@@ -24,9 +24,11 @@ import Realm, {
 } from "realm";
 import { logger } from "./utils/logger";
 import { AuthResultBoundary } from "./components/AuthResultBoundary";
+import { Task } from "./models/Task";
 
 export { ErrorBoundary } from "expo-router";
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
+const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
 export const unstable_settings = {
   initialRouteName: "/",
 };
@@ -59,7 +61,7 @@ const InitialLayout = () => {
   // Clerk consts
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
-  
+
   const [isRealmLoggedIn, setRealmLoggedIn] = useState(false);
   const app = useApp();
 
@@ -77,6 +79,46 @@ const InitialLayout = () => {
     }
   }
   // Fonts
+
+  useEffect(() => {
+    getRealmStatus()
+      .then((res) => {
+        setRealmLoggedIn(res!);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+    if (!isLoaded) return;
+    const inTabsGroup = segments[0] === "(auth)";
+
+    if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
+      router.replace("/budget");
+    } else if (!isSignedIn || !isRealmLoggedIn) {
+      router.replace("/welcome");
+    }
+  }, [isSignedIn]);
+
+  return <Slot />;
+};
+
+const tokenCache = {
+  async getToken(key: string) {
+    try {
+      return SecureStore.getItemAsync(key);
+    } catch (err) {
+      return null;
+    }
+  },
+  async saveToken(key: string, value: string) {
+    try {
+      return SecureStore.setItemAsync(key, value);
+    } catch (err) {
+      return;
+    }
+  },
+};
+
+export default function RootLayout() {
   const [fontsLoaded, fontError] = useFonts({
     IBMPlexSans_400Regular,
     IBMPlexSans_400Regular_Italic,
@@ -101,60 +143,24 @@ const InitialLayout = () => {
     }
   }, [fontsLoaded]);
 
-  useEffect(() => {
-    getRealmStatus()
-      .then((res) => {
-        setRealmLoggedIn(res!);
-      })
-      .catch((err) => {
-        console.log(err);
-      });
-    if (!isLoaded) return;
-    const inTabsGroup = segments[0] === "(auth)";
-
-    if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
-      router.replace("/overview");
-    } else if (!isSignedIn && !isRealmLoggedIn) {
-      router.replace("/welcome");
-    }
-  }, [isSignedIn]);
-
   if (!fontsLoaded) {
-    return <Slot />;
+    return null;
   }
 
-  return <Slot />;
-};
-
-const tokenCache = {
-  async getToken(key: string) {
-    try {
-      return SecureStore.getItemAsync(key);
-    } catch (err) {
-      return null;
-    }
-  },
-  async saveToken(key: string, value: string) {
-    try {
-      return SecureStore.setItemAsync(key, value);
-    } catch (err) {
-      return;
-    }
-  },
-};
-
-export default function RootLayout() {
-  const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
-  console.log(appId);
   return (
     <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
       <AppProvider id={appId}>
         <AuthResultBoundary>
           <UserProvider fallback={InitialLayout}>
             <RealmProvider
-              schema={[]}
+              schema={[Task]}
               sync={{
                 flexible: true,
+                initialSubscriptions: {
+                  update: (mutableSubs, realm) => {
+                    mutableSubs.add(realm.objects(Task));
+                  },
+                },
                 newRealmFileBehavior: {
                   type: OpenRealmBehaviorType.DownloadBeforeOpen,
                 },

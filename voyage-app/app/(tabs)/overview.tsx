@@ -1,12 +1,15 @@
 import { View, Text, Pressable } from "react-native";
 import React from "react";
 import { Link } from "expo-router";
-import { useAuth } from "@clerk/clerk-expo";
+import { useAuth as useClerkAuth} from "@clerk/clerk-expo";
+import { useAuth as useRealmAuth } from "@realm/react";
 
 const Page = () => {
-  const { signOut } = useAuth();
+  const { signOut } = useClerkAuth();
+  const { logOut } = useRealmAuth();
 
-  const doLogout = () => {
+  const doLogout = async () => {
+    logOut();
     signOut();
   };
 

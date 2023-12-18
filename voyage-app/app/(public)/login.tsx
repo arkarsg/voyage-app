@@ -1,4 +1,8 @@
-import { useSignIn, useAuth as useClerkAuth } from "@clerk/clerk-expo";
+import {
+  useSignIn,
+  useAuth as useClerkAuth,
+  useClerk,
+} from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -9,6 +13,7 @@ const login = () => {
   const router = useRouter();
   const { logInWithJWT, result } = useRealmAuth();
   const { getToken, isSignedIn } = useClerkAuth();
+  const clerk = useClerk();
 
   const handleCreateAccountPress = () => {
     router.push("register");
@@ -38,9 +43,17 @@ const login = () => {
       // This indicates the user is signed in
       await setActive({ session: completeSignIn.createdSessionId });
       // token from Clerk
-      const token = await getToken() as string;
+      const token = await getToken({ template: "Atlas" });
       // authenticate to Realm
-      logInWithJWT(token);
+      if (token) {
+        try {
+          logInWithJWT(token);
+        } catch (err) {
+          console.log("🛑 Error logging into Realm", err);
+        }
+      } else {
+        console.log("🛑 Could not get token from Clerk");
+      }
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {
