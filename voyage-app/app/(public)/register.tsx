@@ -1,5 +1,9 @@
 import { TextInput, View, Text, Pressable } from "react-native";
-import { useSignUp, useAuth as useClerkAuth } from "@clerk/clerk-expo";
+import {
+  useSignUp,
+  useAuth as useClerkAuth,
+  useClerk,
+} from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
@@ -9,7 +13,7 @@ import { isValidUsername } from "../utils/ValidUsername";
 const register = () => {
   const { isLoaded, signUp, setActive } = useSignUp();
   const { logInWithJWT, result } = useRealmAuth();
-  const { getToken, isSignedIn } = useClerkAuth();
+  const clerk = useClerk();
 
   const [username, setUsername] = useState("");
   const [emailAddress, setEmailAddress] = useState("");
@@ -56,11 +60,17 @@ const register = () => {
       });
 
       await setActive({ session: completeSignUp.createdSessionId });
-      // token from Clerk
-      const token = (await getToken()) as string;
-      // authenticate to Realm
-      logInWithJWT(token);
-      console.log("🎉 Registered user in Realm")
+      const token = await clerk.session?.getToken({ template: "Atlas" });
+    
+      if (token) {
+        try {
+          logInWithJWT(token);
+        } catch (err) {
+          console.log("🛑 Error logging into Realm", err);
+        }
+      } else {
+        console.log("🛑 Could not get token from Clerk");
+      }
     } catch (err: any) {
       alert(err.errors[0].message);
     } finally {

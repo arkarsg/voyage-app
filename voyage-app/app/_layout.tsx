@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Slot, SplashScreen, useRouter, useSegments } from "expo-router";
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
@@ -16,8 +16,12 @@ import {
   SpaceGrotesk_600SemiBold,
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/dev";
-import { RealmProvider, AppProvider, UserProvider } from "@realm/react";
-import Realm, { ClientResetMode, OpenRealmBehaviorType, SyncError } from "realm";
+import { RealmProvider, AppProvider, UserProvider, useApp } from "@realm/react";
+import Realm, {
+  ClientResetMode,
+  OpenRealmBehaviorType,
+  SyncError,
+} from "realm";
 import { logger } from "./utils/logger";
 import { AuthResultBoundary } from "./components/AuthResultBoundary";
 
@@ -32,7 +36,7 @@ Realm.setLogger((logLevel, message) => {
   const formattedMessage = `Log level: ${logLevel} -- Log Message: ${message}`;
   if (logLevel === "error" || logLevel === "fatal") {
     logger.error(formattedMessage);
-  } else {
+  } else if (logLevel == "debug") {
     logger.info(formattedMessage);
   }
 });
@@ -48,11 +52,6 @@ function handlePreClientReset(localRealm: Realm): void {
   logger.info("Initiating client reset...");
 }
 
-// 
-function handlePostClientReset(localRealm: Realm, remoteRealm: Realm): void {
-  logger.info("Client has been reset");
-}
-
 SplashScreen.preventAutoHideAsync();
 
 const InitialLayout = () => {
@@ -60,7 +59,23 @@ const InitialLayout = () => {
   // Clerk consts
   const { isLoaded, isSignedIn } = useAuth();
   const segments = useSegments();
+  
+  const [isRealmLoggedIn, setRealmLoggedIn] = useState(false);
+  const app = useApp();
 
+  async function getRealmStatus() {
+    try {
+      const userStatus = await app.currentUser;
+      if (userStatus === null) {
+        return false;
+      } else {
+        const userStatus = await app.currentUser!.isLoggedIn;
+        return userStatus;
+      }
+    } catch (err) {
+      console.log("🛑 Failed to fetch user", err);
+    }
+  }
   // Fonts
   const [fontsLoaded, fontError] = useFonts({
     IBMPlexSans_400Regular,
@@ -87,14 +102,20 @@ const InitialLayout = () => {
   }, [fontsLoaded]);
 
   useEffect(() => {
+    getRealmStatus()
+      .then((res) => {
+        setRealmLoggedIn(res!);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
     if (!isLoaded) return;
+    const inTabsGroup = segments[0] === "(auth)";
 
-    const isInTabsGroup = segments[0] === "(tabs)";
-
-    if (isSignedIn && !isInTabsGroup) {
-      router.replace("overview");
-    } else if (!isSignedIn) {
-      router.replace("welcome");
+    if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
+      router.replace("/overview");
+    } else if (!isSignedIn && !isRealmLoggedIn) {
+      router.replace("/welcome");
     }
   }, [isSignedIn]);
 
@@ -122,7 +143,7 @@ const tokenCache = {
   },
 };
 
-const RootLayout = () => {
+export default function RootLayout() {
   const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
   console.log(appId);
   return (
@@ -154,6 +175,4 @@ const RootLayout = () => {
       </AppProvider>
     </ClerkProvider>
   );
-};
-
-export default RootLayout;
+}
