@@ -28,6 +28,7 @@ import { Task } from "./models/Task";
 import { schemas } from "./models";
 import { User } from "./models/User";
 import { Group } from "./models/Group";
+import { Invite } from "./models/Invite";
 
 export { ErrorBoundary } from "expo-router";
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
@@ -164,6 +165,7 @@ export default function RootLayout() {
                     mutableSubs.add(realm.objects(Task));
                     mutableSubs.add(realm.objects(User));
                     mutableSubs.add(realm.objects(Group));
+                    mutableSubs.add(realm.objects(Invite));
                   },
                 },
                 newRealmFileBehavior: {
