@@ -15,7 +15,6 @@ export class Group extends Realm.Object<Group> {
       _id: "objectId",
       group_name: { type: "string", mapTo: "group_name" },
       creatorId: { type: "objectId", mapTo: "creator_id" },
-      // Inverse relationship property
       tripMembers: {
         type: "list",
         objectType: "Users",

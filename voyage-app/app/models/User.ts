@@ -9,7 +9,6 @@ export class User extends Realm.Object<User> {
   username!: string;
   email!: string;
   tripGroups?: Realm.List<Group>;
-  tripInvites?: Realm.List<Invite>;
 
   static schema: ObjectSchema = {
     name: "Users",
@@ -20,7 +19,6 @@ export class User extends Realm.Object<User> {
       username: "string",
       email: "string",
       tripGroups: { type: "list", objectType: "Groups", default: [], mapTo: 'trip_groups' },
-      tripInvites: { type: "list", objectType: "Invites", default: [], mapTo: 'trip_invites' },
     },
   };
 }
