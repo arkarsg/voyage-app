@@ -58,6 +58,8 @@ function getUserDataFromEvent(evt) {
     clerk_id: evt.data.id,
     username: evt.data.username,
     email: evt.data.email_addresses[0].email_address,
+    trip_groups: [],
+    trip_invites: []
   };
 }
 

@@ -11,9 +11,8 @@ import Spinner from "react-native-loading-spinner-overlay";
 
 const login = () => {
   const router = useRouter();
-  const { logInWithJWT, result } = useRealmAuth();
-  const { getToken, isSignedIn } = useClerkAuth();
-  const clerk = useClerk();
+  const { logInWithJWT } = useRealmAuth();
+  const { getToken } = useClerkAuth();
 
   const handleCreateAccountPress = () => {
     router.push("register");

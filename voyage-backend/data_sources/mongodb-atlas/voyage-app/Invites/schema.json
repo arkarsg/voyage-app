@@ -1,0 +1,35 @@
+{
+    "title": "Invite",
+    "properties": {
+        "_id": {
+            "bsonType": "objectId"
+        },
+        "sender": {
+            "bsonType": "objectId"
+        },
+        "sender_username": {
+            "bsonType": "string"
+        },
+        "receiver": {
+            "bsonType": "string"
+        },
+        "group_id": {
+            "bsonType": "objectId"
+        },
+        "group_name": {
+            "bsonType": "string"
+        },
+        "created_at": {
+            "bsonType": "date"
+        }
+    },
+    "required": [
+        "_id",
+        "sender",
+        "sender_username",
+        "receiver",
+        "group_id",
+        "group_name",
+        "created_at"
+    ]
+}

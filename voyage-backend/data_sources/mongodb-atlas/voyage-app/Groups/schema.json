@@ -1,11 +1,5 @@
 {
     "title": "Groups",
-    "type": "object",
-    "required": [
-        "_id",
-        "creator_id",
-        "group_name"
-    ],
     "properties": {
         "_id": {
             "bsonType": "objectId"
@@ -15,6 +9,17 @@
         },
         "group_name": {
             "bsonType": "string"
+        },
+        "trip_members": {
+            "bsonType": "array",
+            "items": {
+                "bsonType": "objectId"
+            }
         }
-    }
+    },
+    "required": [
+        "_id",
+        "creator_id",
+        "group_name"
+    ]
 }

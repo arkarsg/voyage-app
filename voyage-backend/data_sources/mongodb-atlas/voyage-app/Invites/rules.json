@@ -1,0 +1,41 @@
+{
+    "database": "voyage-app",
+    "collection": "Invites",
+    "roles": [
+        {
+            "name": "readOwnWriteOwn",
+            "apply_when": {},
+            "document_filters": {
+                "read": {
+                    "$or": [
+                        {
+                            "receiver": "%%user.custom_data.email"
+                        },
+                        {
+                            "sender": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        }
+                    ]
+                },
+                "write": {
+                    "$or": [
+                        {
+                            "receiver": "%%user.custom_data.email"
+                        },
+                        {
+                            "sender": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        }
+                    ]
+                }
+            },
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "read": true,
+            "write": true
+        }
+    ]
+}

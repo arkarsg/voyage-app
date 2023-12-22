@@ -10,7 +10,7 @@ export class Invite extends Realm.Object<Invite> {
     name: "Invites",
     embedded: true,
     properties: {
-      groupId: { type: "string", mapTo: "group_id" },
+      groupId: { type: "objectId", mapTo: "group_id" },
       group_name: { type: "string", mapTo: "group_name" },
       senderUsername: { type: "string", mapTo: "sender_username" },
     },

@@ -1,12 +1,5 @@
 {
     "title": "Users",
-    "type": "object",
-    "required": [
-        "_id",
-        "clerk_id",
-        "email",
-        "username"
-    ],
     "properties": {
         "_id": {
             "bsonType": "objectId"
@@ -25,6 +18,15 @@
         },
         "username": {
             "bsonType": "string"
+        },
+        "notes": {
+            "bsonType": "string"
         }
-    }
+    },
+    "required": [
+        "_id",
+        "clerk_id",
+        "email",
+        "username"
+    ]
 }

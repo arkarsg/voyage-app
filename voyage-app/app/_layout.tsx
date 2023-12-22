@@ -165,7 +165,6 @@ export default function RootLayout() {
                     mutableSubs.add(realm.objects(Task));
                     mutableSubs.add(realm.objects(User));
                     mutableSubs.add(realm.objects(Group));
-                    mutableSubs.add(realm.objects(Invite));
                   },
                 },
                 newRealmFileBehavior: {

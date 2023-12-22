@@ -1,7 +1,6 @@
 import { TextInput, View, Text, Pressable } from "react-native";
 import {
   useSignUp,
-  useAuth as useClerkAuth,
   useClerk,
 } from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";

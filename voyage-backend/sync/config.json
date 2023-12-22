@@ -1,9 +1,24 @@
 {
     "type": "flexible",
     "state": "enabled",
-    "development_mode_enabled": true,
+    "development_mode_enabled": false,
     "service_name": "mongodb-atlas",
     "database_name": "voyage-app",
     "client_max_offline_days": 30,
-    "is_recovery_mode_disabled": false
+    "is_recovery_mode_disabled": false,
+    "collection_queryable_fields_names": {
+        "Groups": [
+            "trip_members",
+            "creator_id"
+        ],
+        "Invite": [
+            "sender",
+            "receiver"
+        ],
+        "Users": [
+            "email",
+            "username",
+            "clerk_id"
+        ]
+    }
 }

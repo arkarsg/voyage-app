@@ -1,0 +1,45 @@
+{
+    "database": "voyage-app",
+    "collection": "Groups",
+    "roles": [
+        {
+            "name": "readWriteMembers",
+            "apply_when": {},
+            "document_filters": {
+                "read": {
+                    "$or": [
+                        {
+                            "creator_id": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        },
+                        {
+                            "trip_members": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        }
+                    ]
+                },
+                "write": {
+                    "$or": [
+                        {
+                            "creator_id": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        },
+                        {
+                            "trip_members": {
+                                "%stringToOid": "%%user.id"
+                            }
+                        }
+                    ]
+                }
+            },
+            "insert": true,
+            "delete": true,
+            "search": true,
+            "read": true,
+            "write": true
+        }
+    ]
+}
