@@ -1,7 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { Slot, SplashScreen, useRouter, useSegments } from "expo-router";
+
+// Clerk imports
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
 import * as SecureStore from "expo-secure-store";
+
+// MongoDB Atlas Realm imports
+import Realm, {
+  ClientResetMode,
+  OpenRealmBehaviorType,
+  SyncError,
+} from "realm";
+import { RealmProvider, AppProvider, UserProvider, useApp } from "@realm/react";
+import { AuthResultBoundary } from "./components/AuthResultBoundary";
+import { logger } from "./utils/logger";
+
+// Styles
 import {
   useFonts,
   IBMPlexSans_400Regular,
@@ -16,14 +30,10 @@ import {
   SpaceGrotesk_600SemiBold,
   SpaceGrotesk_700Bold,
 } from "@expo-google-fonts/dev";
-import { RealmProvider, AppProvider, UserProvider, useApp } from "@realm/react";
-import Realm, {
-  ClientResetMode,
-  OpenRealmBehaviorType,
-  SyncError,
-} from "realm";
-import { logger } from "./utils/logger";
-import { AuthResultBoundary } from "./components/AuthResultBoundary";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { config } from "@gluestack-ui/config";
+
+// Object models
 import { Task } from "./models/Task";
 import { schemas } from "./models";
 import { User } from "./models/User";
@@ -152,39 +162,40 @@ export default function RootLayout() {
   }
 
   return (
-    <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-      <AppProvider id={appId}>
-        <AuthResultBoundary>
-          <UserProvider fallback={InitialLayout}>
-            <RealmProvider
-              schema={schemas}
-              sync={{
-                flexible: true,
-                initialSubscriptions: {
-                  update: (mutableSubs, realm) => {
-                    mutableSubs.add(realm.objects(Task));
-                    mutableSubs.add(realm.objects(User));
-                    mutableSubs.add(realm.objects(Group));
+    <GluestackUIProvider config={config}>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <AppProvider id={appId}>
+          <AuthResultBoundary>
+            <UserProvider fallback={InitialLayout}>
+              <RealmProvider
+                schema={schemas}
+                sync={{
+                  flexible: true,
+                  initialSubscriptions: {
+                    update: (mutableSubs, realm) => {
+                      mutableSubs.add(realm.objects(User));
+                      mutableSubs.add(realm.objects(Group));
+                    },
                   },
-                },
-                newRealmFileBehavior: {
-                  type: OpenRealmBehaviorType.DownloadBeforeOpen,
-                },
-                existingRealmFileBehavior: {
-                  type: OpenRealmBehaviorType.OpenImmediately,
-                },
-                clientReset: {
-                  mode: ClientResetMode.DiscardUnsyncedChanges,
-                  onBefore: handlePreClientReset,
-                },
-                onError: handleSyncError,
-              }}
-            >
-              <InitialLayout />
-            </RealmProvider>
-          </UserProvider>
-        </AuthResultBoundary>
-      </AppProvider>
-    </ClerkProvider>
+                  newRealmFileBehavior: {
+                    type: OpenRealmBehaviorType.DownloadBeforeOpen,
+                  },
+                  existingRealmFileBehavior: {
+                    type: OpenRealmBehaviorType.OpenImmediately,
+                  },
+                  clientReset: {
+                    mode: ClientResetMode.DiscardUnsyncedChanges,
+                    onBefore: handlePreClientReset,
+                  },
+                  onError: handleSyncError,
+                }}
+              >
+                <InitialLayout />
+              </RealmProvider>
+            </UserProvider>
+          </AuthResultBoundary>
+        </AppProvider>
+      </ClerkProvider>
+    </GluestackUIProvider>
   );
 }
