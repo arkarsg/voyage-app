@@ -1358,11 +1358,6 @@
   resolved "https://registry.yarnpkg.com/@emotion/weak-memoize/-/weak-memoize-0.3.1.tgz#d0fce5d07b0620caa282b5131c297bb60f9d87e6"
   integrity sha512-EsBwpc7hBUJWAsNPBmJy4hxWx12v6bshQsldrVmjxJoc3isbxhOrF2IcCpaXxfvq03NwkI7sbsOLXbYuqF/8Ww==
 
-"@expo-google-fonts/dev@^0.2.3":
-  version "0.2.3"
-  resolved "https://registry.yarnpkg.com/@expo-google-fonts/dev/-/dev-0.2.3.tgz#b52587de9f4562185d223d1ec3cb163ea49ace12"
-  integrity sha512-b0s8mqYb2IJn5pWyFmM4qD3Urbfz7DmRb1tNnSYMlQdj94YaFGGCTcXGPtQJ2m7p+aPWlZLkK0capQgYrPpJUw==
-
 "@expo-google-fonts/inter@^0.2.3":
   version "0.2.3"
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/inter/-/inter-0.2.3.tgz#82bf7224bb76fc6614a00393a9e9ee4d6dd09dcb"

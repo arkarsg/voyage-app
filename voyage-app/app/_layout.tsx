@@ -17,19 +17,13 @@ import { logger } from "./utils/logger";
 
 // Styles
 import {
+  Inter_400Regular,
+  Inter_500Medium,
+  Inter_600SemiBold,
+  Inter_700Bold,
+  Inter_900Black,
   useFonts,
-  IBMPlexSans_400Regular,
-  IBMPlexSans_400Regular_Italic,
-  IBMPlexSans_500Medium,
-  IBMPlexSans_500Medium_Italic,
-  IBMPlexSans_600SemiBold,
-  IBMPlexSans_600SemiBold_Italic,
-  IBMPlexSans_700Bold,
-  IBMPlexSans_700Bold_Italic,
-  SpaceGrotesk_500Medium,
-  SpaceGrotesk_600SemiBold,
-  SpaceGrotesk_700Bold,
-} from "@expo-google-fonts/dev";
+} from "@expo-google-fonts/inter";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
 
@@ -41,8 +35,10 @@ import { Group } from "./models/Group";
 import { Invite } from "./models/Invite";
 
 export { ErrorBoundary } from "expo-router";
+
 const publishableKey = process.env.EXPO_PUBLIC_CLERK_PUBLISHABLE_KEY!;
 const appId = process.env.EXPO_PUBLIC_ATLAS_APP_ID!;
+
 export const unstable_settings = {
   initialRouteName: "/",
 };
@@ -67,6 +63,16 @@ function handleSyncError(
 function handlePreClientReset(localRealm: Realm): void {
   logger.info("Initiating client reset...");
 }
+
+type ThemeContextType = {
+  colorMode?: "dark" | "light";
+  toggleColorMode?: () => void;
+};
+
+export const ThemeContext = React.createContext<ThemeContextType>({
+  colorMode: "light",
+  toggleColorMode: () => {},
+});
 
 SplashScreen.preventAutoHideAsync();
 
@@ -133,18 +139,13 @@ const tokenCache = {
 };
 
 export default function RootLayout() {
+  const [colorMode, setColorMode] = React.useState<"dark" | "light">("light");
   const [fontsLoaded, fontError] = useFonts({
-    IBMPlexSans_400Regular,
-    IBMPlexSans_400Regular_Italic,
-    IBMPlexSans_500Medium,
-    IBMPlexSans_500Medium_Italic,
-    IBMPlexSans_600SemiBold,
-    IBMPlexSans_600SemiBold_Italic,
-    IBMPlexSans_700Bold,
-    IBMPlexSans_700Bold_Italic,
-    SpaceGrotesk_500Medium,
-    SpaceGrotesk_600SemiBold,
-    SpaceGrotesk_700Bold,
+    Inter_400Regular,
+    Inter_500Medium,
+    Inter_600SemiBold,
+    Inter_700Bold,
+    Inter_900Black,
   });
 
   useEffect(() => {
@@ -161,41 +162,47 @@ export default function RootLayout() {
     return null;
   }
 
+  const toggleColorMode = async () => {
+    setColorMode((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
   return (
-    <GluestackUIProvider config={config}>
-      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <AppProvider id={appId}>
-          <AuthResultBoundary>
-            <UserProvider fallback={InitialLayout}>
-              <RealmProvider
-                schema={schemas}
-                sync={{
-                  flexible: true,
-                  initialSubscriptions: {
-                    update: (mutableSubs, realm) => {
-                      mutableSubs.add(realm.objects(User));
-                      mutableSubs.add(realm.objects(Group));
+    <GluestackUIProvider config={config} colorMode={colorMode}>
+      <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
+        <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+          <AppProvider id={appId}>
+            <AuthResultBoundary>
+              <UserProvider fallback={InitialLayout}>
+                <RealmProvider
+                  schema={schemas}
+                  sync={{
+                    flexible: true,
+                    initialSubscriptions: {
+                      update: (mutableSubs, realm) => {
+                        mutableSubs.add(realm.objects(User));
+                        mutableSubs.add(realm.objects(Group));
+                      },
                     },
-                  },
-                  newRealmFileBehavior: {
-                    type: OpenRealmBehaviorType.DownloadBeforeOpen,
-                  },
-                  existingRealmFileBehavior: {
-                    type: OpenRealmBehaviorType.OpenImmediately,
-                  },
-                  clientReset: {
-                    mode: ClientResetMode.DiscardUnsyncedChanges,
-                    onBefore: handlePreClientReset,
-                  },
-                  onError: handleSyncError,
-                }}
-              >
-                <InitialLayout />
-              </RealmProvider>
-            </UserProvider>
-          </AuthResultBoundary>
-        </AppProvider>
-      </ClerkProvider>
+                    newRealmFileBehavior: {
+                      type: OpenRealmBehaviorType.DownloadBeforeOpen,
+                    },
+                    existingRealmFileBehavior: {
+                      type: OpenRealmBehaviorType.OpenImmediately,
+                    },
+                    clientReset: {
+                      mode: ClientResetMode.DiscardUnsyncedChanges,
+                      onBefore: handlePreClientReset,
+                    },
+                    onError: handleSyncError,
+                  }}
+                >
+                  <InitialLayout />
+                </RealmProvider>
+              </UserProvider>
+            </AuthResultBoundary>
+          </AppProvider>
+        </ClerkProvider>
+      </ThemeContext.Provider>
     </GluestackUIProvider>
   );
 }
