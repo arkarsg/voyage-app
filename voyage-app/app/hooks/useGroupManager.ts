@@ -8,17 +8,17 @@ export function useGroupManager() {
   const user = useUser();
   const callRealmApi = useRealmApi(user);
 
-  const createGroup = (name: string, creatorId: Realm.BSON.ObjectId) =>
+  const createGroup = (name: string, creatorId: string) =>
     callRealmApi("createGroup", { name: name, creatorId: creatorId });
 
-  const leaveGroup = (groupId: Realm.BSON.ObjectId) =>
+  const leaveGroup = (groupId: string) =>
     callRealmApi("leaveGroup", { groupId: groupId });
 
-  const deleteGroup = (groupId: Realm.BSON.ObjectId) =>
+  const deleteGroup = (groupId: string) =>
     callRealmApi("deleteGroup", { groupId: groupId });
 
   const inviteGroupMember = (
-    groupId: Realm.BSON.ObjectId,
+    groupId: string,
     newMemberEmail: string
   ) => {
     callRealmApi("inviteGroupMember", {
@@ -28,15 +28,15 @@ export function useGroupManager() {
   };
 
   const respondToInvitation = (
-    groupId: Realm.BSON.ObjectId,
+    groupId: string,
     accept: boolean
   ) => {
     callRealmApi("respondToInvitation", { groupId: groupId, accept: accept });
   };
 
   const removeGroupMember = (
-    groupId: Realm.BSON.ObjectId,
-    userId: Realm.BSON.ObjectId
+    groupId: string,
+    userId: string
   ) => {
     callRealmApi("removeGroupMember", {
       groupId: groupId.toString(),

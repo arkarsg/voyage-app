@@ -16,11 +16,11 @@ export class Invite extends Realm.Object<Invite> {
     properties: {
       _id: "objectId",
       sender: "objectId",
-      senderUsername: { type: "objectId", mapTo: "sender_username" },
+      senderUsername: { type: "string", mapTo: "sender_username" },
       receiver: "string",
       groupId: { type: "objectId", mapTo: "group_id" },
       group_name: { type: "string", mapTo: "group_name" },
-      createdAt: { type: "data", mapTo: "created_at" },
+      createdAt: { type: "date", mapTo: "created_at" },
     },
   };
 }
