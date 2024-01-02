@@ -1,11 +1,14 @@
 import React from "react";
 import { Stack, useRouter } from "expo-router";
 import { Button } from "react-native";
+import { orange } from "@tamagui/colors";
 
 function PublicLayout() {
   const router = useRouter();
   return (
-    <Stack>
+    <Stack screenOptions={{
+      headerShadowVisible: false
+    }}>
       <Stack.Screen
         name="welcome"
         options={{ headerTitle: "Welcome", headerShown: false }}
@@ -32,7 +35,10 @@ function PublicLayout() {
         name="login"
         options={{
           headerTitle: "Log in",
-          headerTintColor: "#f5f5f4",
+          headerStyle: {
+            backgroundColor: orange.orange1,
+            
+          },
           headerTitleStyle: {
             fontFamily: "Inter_600SemiBold",
             color: "#27272a",
