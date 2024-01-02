@@ -1,17 +1,18 @@
-import { TextInput, View, Text, Pressable } from "react-native";
-import {
-  useSignUp,
-  useClerk,
-} from "@clerk/clerk-expo";
+import { TextInput, View, Pressable } from "react-native";
+import { useSignUp, useClerk } from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
-import { Link, Stack } from "expo-router";
+import { Link, Stack, useRouter } from "expo-router";
 import { isValidUsername } from "../utils/ValidUsername";
+import { Form, Input, YStack, Text, Button, XStack } from "tamagui";
+import { orange, purple } from "@tamagui/themes";
 
 const register = () => {
+  const router = useRouter();
+
   const { isLoaded, signUp, setActive } = useSignUp();
-  const { logInWithJWT, result } = useRealmAuth();
+  const { logInWithJWT } = useRealmAuth();
   const clerk = useClerk();
 
   const [username, setUsername] = useState("");
@@ -21,6 +22,9 @@ const register = () => {
   const [code, setCode] = useState("");
   const [loading, setLoading] = useState(false);
 
+  const handleHaveAccountPress = () => {
+    router.push("login");
+  };
   const onSignUpPress = async () => {
     if (!isLoaded) {
       return;
@@ -60,7 +64,7 @@ const register = () => {
 
       await setActive({ session: completeSignUp.createdSessionId });
       const token = await clerk.session?.getToken({ template: "Atlas" });
-    
+
       if (token) {
         try {
           logInWithJWT(token);
@@ -78,147 +82,134 @@ const register = () => {
   };
 
   return (
-    <View className="h-full w-full flex bg-stone-100">
+    <YStack overflow="hidden" flex={1} backgroundColor={orange.orange1}>
       <Stack.Screen options={{ headerBackVisible: !pendingVerification }} />
       <Spinner visible={loading} />
 
       {!pendingVerification && (
         <>
-          <View className="flex items-center space-y-5 pt-32">
-            <View className="space-y-2 w-full items-center">
-              <View className="justify-around items-left border-b border-stone-300 w-10/12">
-                <TextInput
-                  autoCapitalize="none"
-                  placeholder="E-mail"
-                  value={emailAddress}
-                  onChangeText={setEmailAddress}
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <View className="justify-around items-left border-b border-stone-300 w-10/12">
-                <TextInput
-                  autoCapitalize="none"
-                  placeholder="Username"
-                  value={username}
-                  onChangeText={setUsername}
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
-                <TextInput
-                  placeholder="Password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <Pressable
-                onPress={onSignUpPress}
-                className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
-              >
-                <Text
-                  style={{
-                    fontFamily: "IBMPlexSans_500Medium",
-                  }}
-                  className="text-zinc-100 text-lg"
+          <Form onSubmit={onSignUpPress}>
+            <YStack alignItems="center" paddingTop="$8" space="$1">
+              <Input
+                autoCapitalize="none"
+                placeholder="Username"
+                value={username}
+                onChangeText={setUsername}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+              />
+              <Input
+                autoCapitalize="none"
+                placeholder="E-mail"
+                value={emailAddress}
+                onChangeText={setEmailAddress}
+                size="$4"
+                autoComplete="email"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+              />
+              <Input
+                autoCapitalize="none"
+                placeholder="Password"
+                value={password}
+                onChangeText={setPassword}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+              />
+              <Form.Trigger asChild disabled={loading === true}>
+                <Button
+                  size="$4"
+                  theme="purple"
+                  borderRadius="$12"
+                  width="83.333333%"
+                  fontFamily="Inter_500Medium"
+                  fontSize={15}
+                  marginVertical="$4"
                 >
-                  Join
-                </Text>
-              </Pressable>
-            </View>
-            <View className="justify-center flex-row items-center">
-              <Text
-                style={{
-                  fontFamily: "IBMPlexSans_400Regular",
-                }}
-                className="text-zinc-700 text-m"
-              >
-                Have an account?{" "}
-              </Text>
-              <Link href="/login" asChild>
-                <Pressable>
-                  <Text
-                    style={{
-                      fontFamily: "IBMPlexSans_400Regular",
-                    }}
-                    className="text-voyage-blue text-m"
-                  >
-                    Log in
-                  </Text>
-                </Pressable>
-              </Link>
-            </View>
-          </View>
+                  Create an account
+                </Button>
+              </Form.Trigger>
+            </YStack>
+          </Form>
+          <XStack alignSelf="center">
+            <Text fontFamily="$body">Have an account? </Text>
+            <Text
+              fontFamily="Inter_600SemiBold"
+              color={purple.purple9}
+              onPress={handleHaveAccountPress}
+            >
+              Log in
+            </Text>
+          </XStack>
         </>
       )}
 
       {pendingVerification && (
         <>
-          <View className="flex items-center space-y-5 pt-32">
-            <View className="space-y-2 w-full items-center">
-              <View className="space-y-2 w-10/12 m-5">
-                <Text
-                  style={{
-                    fontFamily: "IBMPlexSans_600SemiBold",
-                  }}
-                  className="text-zinc-700 text-2xl"
-                >
-                  Just one more step...
-                </Text>
-                <Text
-                  style={{
-                    fontFamily: "IBMPlexSans_500Medium",
-                  }}
-                  className="text-zinc-700 text-m"
-                >
-                  We have sent a verification code to your e-mail!{"\n"}Paste
-                  the code below
-                </Text>
-              </View>
-              <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
-                <TextInput
-                  autoCapitalize="none"
-                  placeholder="Verification code"
-                  value={code}
-                  onChangeText={setCode}
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <Pressable
-                onPress={onPressVerify}
-                className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
+          <Form onSubmit={onPressVerify}>
+            <YStack alignItems="center" paddingTop="$8" space="$1">
+              <Text
+                marginVertical="$4"
+                marginHorizontal="$6"
+                fontFamily="Inter_500Medium"
+                fontSize={24}
               >
-                <Text
-                  style={{
-                    fontFamily: "IBMPlexSans_500Medium",
-                  }}
-                  className="text-zinc-100 text-lg"
+                We have sent a verification code to your email!
+              </Text>
+              <Input
+                autoCapitalize="none"
+                placeholder="Verification Code"
+                value={code}
+                onChangeText={setCode}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+                maxLength={6}
+              />
+              <Form.Trigger asChild disabled={loading === true}>
+                <Button
+                  size="$4"
+                  theme="purple"
+                  borderRadius="$12"
+                  width="83.333333%"
+                  fontFamily="Inter_500Medium"
+                  fontSize={15}
+                  marginVertical="$4"
                 >
-                  Verify account
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+                  Verify my account
+                </Button>
+              </Form.Trigger>
+            </YStack>
+          </Form>
         </>
       )}
-    </View>
+    </YStack>
   );
 };
 

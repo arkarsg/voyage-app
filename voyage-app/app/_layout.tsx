@@ -67,15 +67,6 @@ function handlePreClientReset(localRealm: Realm): void {
   logger.info("Initiating client reset...");
 }
 
-type ThemeContextType = {
-  colorMode?: "dark" | "light";
-  toggleColorMode?: () => void;
-};
-
-export const ThemeContext = React.createContext<ThemeContextType>({
-  colorMode: "light",
-  toggleColorMode: () => {},
-});
 
 SplashScreen.preventAutoHideAsync();
 

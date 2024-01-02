@@ -6,9 +6,11 @@ import { orange } from "@tamagui/colors";
 function PublicLayout() {
   const router = useRouter();
   return (
-    <Stack screenOptions={{
-      headerShadowVisible: false
-    }}>
+    <Stack
+      screenOptions={{
+        headerShadowVisible: false,
+      }}
+    >
       <Stack.Screen
         name="welcome"
         options={{ headerTitle: "Welcome", headerShown: false }}
@@ -17,6 +19,9 @@ function PublicLayout() {
         name="register"
         options={{
           headerTitle: "Sign up",
+          headerStyle: {
+            backgroundColor: orange.orange1,
+          },
           headerTitleStyle: {
             fontFamily: "Inter_600SemiBold",
           },
@@ -37,7 +42,6 @@ function PublicLayout() {
           headerTitle: "Log in",
           headerStyle: {
             backgroundColor: orange.orange1,
-            
           },
           headerTitleStyle: {
             fontFamily: "Inter_600SemiBold",
@@ -74,7 +78,6 @@ function PublicLayout() {
           ),
         }}
       />
-
     </Stack>
   );
 }
