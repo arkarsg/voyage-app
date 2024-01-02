@@ -13,9 +13,9 @@ function PublicLayout() {
       <Stack.Screen
         name="register"
         options={{
-          headerTitle: "Sign up with Google",
+          headerTitle: "Sign up",
           headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
+            fontFamily: "Inter_600SemiBold",
           },
           presentation: "modal",
           headerLeft: () => (
@@ -34,7 +34,7 @@ function PublicLayout() {
           headerTitle: "Log in",
           headerTintColor: "#f5f5f4",
           headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
+            fontFamily: "Inter_600SemiBold",
             color: "#27272a",
           },
           presentation: "modal",
@@ -54,7 +54,7 @@ function PublicLayout() {
           headerTitle: "Reset password",
           headerTintColor: "#f5f5f4",
           headerTitleStyle: {
-            fontFamily: "IBMPlexSans_500Medium",
+            fontFamily: "Inter_600SemiBold",
             color: "#27272a",
           },
           presentation: "modal",

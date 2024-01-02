@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Slot, SplashScreen, useRouter, useSegments } from "expo-router";
+import { useColorScheme } from "react-native";
 
 // Clerk imports
 import { ClerkProvider, useAuth } from "@clerk/clerk-expo";
@@ -15,7 +16,7 @@ import { RealmProvider, AppProvider, UserProvider, useApp } from "@realm/react";
 import { AuthResultBoundary } from "./components/AuthResultBoundary";
 import { logger } from "./utils/logger";
 
-// Styles
+// Fonts
 import {
   Inter_400Regular,
   Inter_500Medium,
@@ -24,8 +25,10 @@ import {
   Inter_900Black,
   useFonts,
 } from "@expo-google-fonts/inter";
-import { GluestackUIProvider } from "@gluestack-ui/themed";
-import { config } from "@gluestack-ui/config";
+
+// Tamagui
+import config from "../tamagui.config";
+import { TamaguiProvider, Theme } from "tamagui";
 
 // Object models
 import { Task } from "./models/Task";
@@ -139,7 +142,8 @@ const tokenCache = {
 };
 
 export default function RootLayout() {
-  const [colorMode, setColorMode] = React.useState<"dark" | "light">("light");
+  const colorScheme = useColorScheme();
+
   const [fontsLoaded, fontError] = useFonts({
     Inter_400Regular,
     Inter_500Medium,
@@ -162,47 +166,43 @@ export default function RootLayout() {
     return null;
   }
 
-  const toggleColorMode = async () => {
-    setColorMode((prev) => (prev === "light" ? "dark" : "light"));
-  };
-
   return (
-    <GluestackUIProvider config={config} colorMode={colorMode}>
-      <ThemeContext.Provider value={{ colorMode, toggleColorMode }}>
-        <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-          <AppProvider id={appId}>
-            <AuthResultBoundary>
-              <UserProvider fallback={InitialLayout}>
-                <RealmProvider
-                  schema={schemas}
-                  sync={{
-                    flexible: true,
-                    initialSubscriptions: {
-                      update: (mutableSubs, realm) => {
-                        mutableSubs.add(realm.objects(User));
-                        mutableSubs.add(realm.objects(Group));
-                      },
+    <TamaguiProvider config={config}>
+      <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
+      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+        <AppProvider id={appId}>
+          <AuthResultBoundary>
+            <UserProvider fallback={InitialLayout}>
+              <RealmProvider
+                schema={schemas}
+                sync={{
+                  flexible: true,
+                  initialSubscriptions: {
+                    update: (mutableSubs, realm) => {
+                      mutableSubs.add(realm.objects(User));
+                      mutableSubs.add(realm.objects(Group));
                     },
-                    newRealmFileBehavior: {
-                      type: OpenRealmBehaviorType.DownloadBeforeOpen,
-                    },
-                    existingRealmFileBehavior: {
-                      type: OpenRealmBehaviorType.OpenImmediately,
-                    },
-                    clientReset: {
-                      mode: ClientResetMode.DiscardUnsyncedChanges,
-                      onBefore: handlePreClientReset,
-                    },
-                    onError: handleSyncError,
-                  }}
-                >
-                  <InitialLayout />
-                </RealmProvider>
-              </UserProvider>
-            </AuthResultBoundary>
-          </AppProvider>
-        </ClerkProvider>
-      </ThemeContext.Provider>
-    </GluestackUIProvider>
+                  },
+                  newRealmFileBehavior: {
+                    type: OpenRealmBehaviorType.DownloadBeforeOpen,
+                  },
+                  existingRealmFileBehavior: {
+                    type: OpenRealmBehaviorType.OpenImmediately,
+                  },
+                  clientReset: {
+                    mode: ClientResetMode.DiscardUnsyncedChanges,
+                    onBefore: handlePreClientReset,
+                  },
+                  onError: handleSyncError,
+                }}
+              >
+                <InitialLayout />
+              </RealmProvider>
+            </UserProvider>
+          </AuthResultBoundary>
+        </AppProvider>
+      </ClerkProvider>
+      </Theme>
+    </TamaguiProvider>
   );
 }
