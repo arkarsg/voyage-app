@@ -2,7 +2,6 @@ import { useSignIn, useAuth as useClerkAuth } from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
-import { View, TextInput, Pressable } from "react-native";
 import Spinner from "react-native-loading-spinner-overlay";
 
 import {
@@ -94,6 +93,7 @@ const login = () => {
           <Input
             autoCapitalize="none"
             placeholder="Password"
+            secureTextEntry={true}
             value={password}
             onChangeText={setPassword}
             size="$4"

@@ -1,21 +1,14 @@
 import { useSignIn } from "@clerk/clerk-expo";
-import { Link, Stack, useRouter } from "expo-router";
+import { orange } from "@tamagui/themes";
+import { Stack } from "expo-router";
 import React, { useState } from "react";
-import {
-  View,
-  StyleSheet,
-  TextInput,
-  Button,
-  Pressable,
-  Text,
-  Alert,
-} from "react-native";
+import { Button, Form, Input, YStack, Text } from "tamagui";
 
 const reset = () => {
   const [emailAddress, setEmailAddress] = useState("");
   const [password, setPassword] = useState("");
   const [code, setCode] = useState("");
-  const [successfulCreation, setSuccessfulCreation] = useState(false);
+  const [successfulCreation, setSuccessfulCreation] = useState(true);
   const { signIn, setActive } = useSignIn();
 
   // Request a passowrd reset code by email
@@ -50,91 +43,110 @@ const reset = () => {
   };
 
   return (
-    <View className="h-full w-full flex bg-stone-100">
+    <YStack overflow="hidden" flex={1} backgroundColor={orange.orange1}>
       <Stack.Screen options={{ headerBackVisible: !successfulCreation }} />
       {!successfulCreation && (
         <>
-          <View className="space-y-2 w-full items-center pt-32">
-            <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
-              <TextInput
+          <Form onSubmit={onRequestReset}>
+            <YStack alignItems="center" paddingTop="$8" space="$1">
+              <Input
                 autoCapitalize="none"
                 placeholder="E-mail"
                 value={emailAddress}
                 onChangeText={setEmailAddress}
-                style={{
-                  marginVertical: 15,
-                  fontFamily: "IBMPlexSans_500Medium",
-                  fontSize: 15,
-                }}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+                maxLength={6}
               />
-            </View>
 
-            <Pressable
-              onPress={onRequestReset}
-              className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
-            >
-              <Text
-                style={{
-                  fontFamily: "IBMPlexSans_500Medium",
-                }}
-                className="text-zinc-100 text-lg"
-              >
-                Send request email
-              </Text>
-            </Pressable>
-          </View>
+              <Form.Trigger asChild>
+                <Button
+                  size="$4"
+                  theme="purple"
+                  borderRadius="$12"
+                  width="83.333333%"
+                  fontFamily="Inter_500Medium"
+                  fontSize={15}
+                  marginVertical="$4"
+                >
+                  Send reset code
+                </Button>
+              </Form.Trigger>
+            </YStack>
+          </Form>
         </>
       )}
 
       {successfulCreation && (
         <>
-          <View className="flex items-center space-y-5 pt-32">
-            <View className="space-y-2 w-full items-center">
-              <View className="justify-around items-left border-b border-stone-300 w-10/12">
-                <TextInput
-                  autoCapitalize="none"
-                  placeholder="Reset code"
-                  value={code}
-                  onChangeText={setCode}
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <View className="justify-around items-left border-b border-stone-300 w-10/12 mb-6">
-                <TextInput
-                  autoCapitalize="none"
-                  placeholder="New password"
-                  value={password}
-                  onChangeText={setPassword}
-                  secureTextEntry
-                  style={{
-                    marginVertical: 15,
-                    fontFamily: "IBMPlexSans_500Medium",
-                    fontSize: 15,
-                  }}
-                />
-              </View>
-              <Pressable
-                onPress={onReset}
-                className="rounded-3xl w-10/12 items-center px-4 py-3 bg-voyage-blue"
+          <Form onSubmit={onReset}>
+            <YStack alignItems="center" paddingTop="$8" space="$1">
+              <Text
+                marginVertical="$4"
+                marginHorizontal="$6"
+                fontFamily="Inter_500Medium"
+                fontSize={24}
               >
-                <Text
-                  style={{
-                    fontFamily: "IBMPlexSans_500Medium",
-                  }}
-                  className="text-zinc-100 text-lg"
+                Reset your account with the code sent to your email!
+              </Text>
+              <Input
+                autoCapitalize="none"
+                placeholder="Reset code"
+                value={code}
+                onChangeText={setCode}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+                maxLength={6}
+              />
+              <Input
+                autoCapitalize="none"
+                placeholder="New password"
+                secureTextEntry={true}
+                value={password}
+                onChangeText={setPassword}
+                size="$4"
+                marginVertical="$2"
+                fontFamily="Inter_500Medium"
+                fontSize={15}
+                borderRadius={0}
+                backgroundColor="transparent"
+                borderColor="transparent"
+                borderBottomColor="rgb(214, 211, 209)"
+                width="83.333333%"
+                maxLength={6}
+              />
+              <Form.Trigger asChild>
+                <Button
+                  size="$4"
+                  theme="purple"
+                  borderRadius="$12"
+                  width="83.333333%"
+                  fontFamily="Inter_500Medium"
+                  fontSize={15}
+                  marginVertical="$4"
                 >
                   Reset password
-                </Text>
-              </Pressable>
-            </View>
-          </View>
+                </Button>
+              </Form.Trigger>
+            </YStack>
+          </Form>
         </>
       )}
-    </View>
+    </YStack>
   );
 };
 

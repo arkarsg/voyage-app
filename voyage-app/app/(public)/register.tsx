@@ -1,10 +1,8 @@
-import { TextInput, View, Pressable } from "react-native";
 import { useSignUp, useClerk } from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import Spinner from "react-native-loading-spinner-overlay";
 import { useState } from "react";
-import { Link, Stack, useRouter } from "expo-router";
-import { isValidUsername } from "../utils/ValidUsername";
+import { Stack, useRouter } from "expo-router";
 import { Form, Input, YStack, Text, Button, XStack } from "tamagui";
 import { orange, purple } from "@tamagui/themes";
 
@@ -124,6 +122,7 @@ const register = () => {
               <Input
                 autoCapitalize="none"
                 placeholder="Password"
+                secureTextEntry={true}
                 value={password}
                 onChangeText={setPassword}
                 size="$4"
@@ -174,7 +173,7 @@ const register = () => {
                 fontFamily="Inter_500Medium"
                 fontSize={24}
               >
-                We have sent a verification code to your email!
+                Verify your account with the code sent to your email!
               </Text>
               <Input
                 autoCapitalize="none"
