@@ -6,7 +6,7 @@ export class Group extends Realm.Object<Group> {
   _id!: BSON.ObjectId;
   groupName!: string;
   creatorId!: BSON.ObjectId;
-  tripMembers!: Realm.List<User>;
+  tripMembers!: Realm.List<BSON.ObjectId>;
 
   static schema: ObjectSchema = {
     name: "Groups",
@@ -17,7 +17,7 @@ export class Group extends Realm.Object<Group> {
       creatorId: { type: "objectId", mapTo: "creator_id" },
       tripMembers: {
         type: "list",
-        objectType: "Users",
+        objectType: "objectId",
         mapTo: "trip_members",
         default: [],
       },
