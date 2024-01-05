@@ -67,7 +67,6 @@ function handlePreClientReset(localRealm: Realm): void {
   logger.info("Initiating client reset...");
 }
 
-
 SplashScreen.preventAutoHideAsync();
 
 const InitialLayout = () => {
@@ -81,11 +80,12 @@ const InitialLayout = () => {
 
   async function getRealmStatus() {
     try {
-      const userStatus = await app.currentUser;
+      const userStatus = app.currentUser;
+      console.log(JSON.stringify(userStatus))
       if (userStatus === null) {
         return false;
       } else {
-        const userStatus = await app.currentUser!.isLoggedIn;
+        const userStatus = app.currentUser!.isLoggedIn;
         return userStatus;
       }
     } catch (err) {
@@ -102,15 +102,19 @@ const InitialLayout = () => {
       .catch((err) => {
         console.log(err);
       });
-    if (!isLoaded) return;
-    const inTabsGroup = segments[0] === "(auth)";
 
+    if (!isLoaded) {
+      return;
+    }
+    const inTabsGroup = segments[0] === "(auth)";
+    console.log("Clerk: ", isSignedIn)
+    console.log("Realm: ", isRealmLoggedIn)
     if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
       router.replace("/budget");
     } else if (!isSignedIn || !isRealmLoggedIn) {
       router.replace("/welcome");
     }
-  }, [isSignedIn]);
+  }, [isSignedIn, isRealmLoggedIn]);
 
   return <Slot />;
 };
@@ -159,40 +163,40 @@ export default function RootLayout() {
 
   return (
     <TamaguiProvider config={config}>
-      <Theme name={colorScheme === 'dark' ? 'dark' : 'light'}>
-      <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
-        <AppProvider id={appId}>
-          <AuthResultBoundary>
-            <UserProvider fallback={InitialLayout}>
-              <RealmProvider
-                schema={schemas}
-                sync={{
-                  flexible: true,
-                  initialSubscriptions: {
-                    update: (mutableSubs, realm) => {
-                      mutableSubs.add(realm.objects(User));
-                      mutableSubs.add(realm.objects(Group));
+      <Theme name={colorScheme === "dark" ? "dark" : "light"}>
+        <ClerkProvider publishableKey={publishableKey} tokenCache={tokenCache}>
+          <AppProvider id={appId}>
+            <AuthResultBoundary>
+              <UserProvider fallback={InitialLayout}>
+                <RealmProvider
+                  schema={schemas}
+                  sync={{
+                    flexible: true,
+                    initialSubscriptions: {
+                      update: (mutableSubs, realm) => {
+                        mutableSubs.add(realm.objects(User));
+                        mutableSubs.add(realm.objects(Group));
+                      },
                     },
-                  },
-                  newRealmFileBehavior: {
-                    type: OpenRealmBehaviorType.DownloadBeforeOpen,
-                  },
-                  existingRealmFileBehavior: {
-                    type: OpenRealmBehaviorType.OpenImmediately,
-                  },
-                  clientReset: {
-                    mode: ClientResetMode.DiscardUnsyncedChanges,
-                    onBefore: handlePreClientReset,
-                  },
-                  onError: handleSyncError,
-                }}
-              >
-                <InitialLayout />
-              </RealmProvider>
-            </UserProvider>
-          </AuthResultBoundary>
-        </AppProvider>
-      </ClerkProvider>
+                    newRealmFileBehavior: {
+                      type: OpenRealmBehaviorType.DownloadBeforeOpen,
+                    },
+                    existingRealmFileBehavior: {
+                      type: OpenRealmBehaviorType.OpenImmediately,
+                    },
+                    clientReset: {
+                      mode: ClientResetMode.DiscardUnsyncedChanges,
+                      onBefore: handlePreClientReset,
+                    },
+                    onError: handleSyncError,
+                  }}
+                >
+                  <InitialLayout />
+                </RealmProvider>
+              </UserProvider>
+            </AuthResultBoundary>
+          </AppProvider>
+        </ClerkProvider>
       </Theme>
     </TamaguiProvider>
   );

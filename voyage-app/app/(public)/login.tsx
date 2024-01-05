@@ -1,4 +1,8 @@
-import { useSignIn, useAuth as useClerkAuth } from "@clerk/clerk-expo";
+import {
+  useSignIn,
+  useAuth as useClerkAuth,
+  SignedOut,
+} from "@clerk/clerk-expo";
 import { useAuth as useRealmAuth } from "@realm/react";
 import { useRouter } from "expo-router";
 import React, { useState } from "react";
@@ -41,6 +45,7 @@ const login = () => {
       await setActive({ session: completeSignIn.createdSessionId });
       // token from Clerk
       const token = await getToken({ template: "Atlas" });
+      console.log(token)
       // authenticate to Realm
       if (token) {
         try {

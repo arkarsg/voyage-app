@@ -8,7 +8,7 @@ export class User extends Realm.Object<User> {
   clerkId!: string;
   username!: string;
   email!: string;
-  tripGroups?: Realm.List<Group>;
+  tripGroups?: Realm.List<BSON.ObjectId>;
 
   static schema: ObjectSchema = {
     name: "Users",
@@ -18,7 +18,7 @@ export class User extends Realm.Object<User> {
       clerkId: { type: "string", mapTo: "clerk_id" },
       username: "string",
       email: "string",
-      tripGroups: { type: "list", objectType: "Groups", default: [], mapTo: 'trip_groups' },
+      tripGroups: { type: "list", objectType: "objectId", default: [], mapTo: 'trip_groups' },
     },
   };
 }
