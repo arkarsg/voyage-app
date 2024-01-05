@@ -1,7 +1,6 @@
-import { Link, useRouter } from "expo-router";
-import { LinearGradient } from "expo-linear-gradient";
+import { useRouter } from "expo-router";
 import { SignedOut } from "@clerk/clerk-expo";
-import { Button, H1, Stack, Text, YStack } from "tamagui";
+import { Button, Stack, Text, YStack } from "tamagui";
 import { orange, purple } from "@tamagui/themes";
 
 const AuthPage = () => {
