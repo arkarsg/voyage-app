@@ -81,7 +81,7 @@ const InitialLayout = () => {
   async function getRealmStatus() {
     try {
       const userStatus = app.currentUser;
-      console.log(JSON.stringify(userStatus))
+      console.log(JSON.stringify(userStatus));
       if (userStatus === null) {
         return false;
       } else {
@@ -107,8 +107,8 @@ const InitialLayout = () => {
       return;
     }
     const inTabsGroup = segments[0] === "(auth)";
-    console.log("Clerk: ", isSignedIn)
-    console.log("Realm: ", isRealmLoggedIn)
+    console.log("Clerk: ", isSignedIn);
+    console.log("Realm: ", isRealmLoggedIn);
     if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
       router.replace("/budget");
     } else if (!isSignedIn || !isRealmLoggedIn) {
@@ -140,6 +140,8 @@ export default function RootLayout() {
   const colorScheme = useColorScheme();
 
   const [fontsLoaded, fontError] = useFonts({
+    Inter: require("@tamagui/font-inter/otf/Inter-Medium.otf"),
+    InterBold: require("@tamagui/font-inter/otf/Inter-Bold.otf"),
     Inter_400Regular,
     Inter_500Medium,
     Inter_600SemiBold,
