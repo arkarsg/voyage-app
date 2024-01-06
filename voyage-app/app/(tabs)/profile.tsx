@@ -39,7 +39,17 @@ const Page = () => {
       </Text>
       <UserGroupCard groups={groups} />
       <CustomSeparator marginVertical="$2" />
-      <Button marginVertical="$3.5" marginHorizontal="$2.5" onPress={doLogout} theme="red" pressTheme>
+      <Button
+        marginVertical="$3.5"
+        marginHorizontal="$2.5"
+        onPress={doLogout}
+        theme="red"
+        pressTheme
+        size="$4"
+        borderRadius="$12"
+        fontFamily="Inter_500Medium"
+        fontSize={15}
+      >
         <Text>Log out</Text>
       </Button>
     </YStack>
