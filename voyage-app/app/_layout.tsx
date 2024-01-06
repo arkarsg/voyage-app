@@ -110,7 +110,7 @@ const InitialLayout = () => {
     console.log("Clerk: ", isSignedIn);
     console.log("Realm: ", isRealmLoggedIn);
     if (isSignedIn && !inTabsGroup && isRealmLoggedIn) {
-      router.replace("/budget");
+      router.replace("/overview");
     } else if (!isSignedIn || !isRealmLoggedIn) {
       router.replace("/welcome");
     }
